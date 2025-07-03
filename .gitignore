@@ -1,0 +1,14 @@
+.qodo
+.env
+*.svg
+*.sh
+*.png
+*.csv
+*.log
+*.txt
+./csv
+./json
+./logs
+./result
+./utils
+./visualize

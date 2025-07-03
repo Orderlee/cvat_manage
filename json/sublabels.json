@@ -1,0 +1,302 @@
+[
+  {
+    "id": 3620,
+    "name": "person",
+    "color": "#ff0000",
+    "attributes": [],
+    "type": "skeleton",
+    "sublabels": [
+      {
+        "id": 3621,
+        "name": "Left Eye",
+        "color": "#07eda5",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3622,
+        "name": "Right Eye",
+        "color": "#fe9e5a",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3623,
+        "name": "Nose",
+        "color": "#c59e21",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3624,
+        "name": "Left Ear",
+        "color": "#7571dd",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3625,
+        "name": "Left Shoulder",
+        "color": "#0227c7",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3626,
+        "name": "Left Elbow",
+        "color": "#4dc53a",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3627,
+        "name": "Left Wrist",
+        "color": "#927bc3",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3628,
+        "name": "Right Ear",
+        "color": "#0b21b7",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3629,
+        "name": "Right Shoulder",
+        "color": "#dc70d6",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3630,
+        "name": "Right Elbow",
+        "color": "#5f240c",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3631,
+        "name": "Right Wrist",
+        "color": "#1c5990",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3632,
+        "name": "Left Hip",
+        "color": "#99e1b5",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3633,
+        "name": "Left Knee",
+        "color": "#e33bf4",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3634,
+        "name": "Left Ankle",
+        "color": "#9f4907",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3635,
+        "name": "Right Hip",
+        "color": "#8c6002",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3636,
+        "name": "Right Knee",
+        "color": "#2657c6",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3637,
+        "name": "Right Ankle",
+        "color": "#fc5c7d",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      }
+    ],
+    "project_id": 168,
+    "parent_id": null,
+    "has_parent": false,
+    "svg": "<line x1=&quot;53.96946334838867&quot; y1=&quot;52.57037353515625&quot; x2=&quot;54.136688232421875&quot; y2=&quot;61.76774215698242&quot; data-type=&quot;edge&quot; data-node-from=&quot;16&quot; data-node-to=&quot;17&quot;></line>\n<line x1=&quot;54.136688232421875&quot; y1=&quot;45.881378173828125&quot; x2=&quot;53.96946334838867&quot; y2=&quot;52.57037353515625&quot; data-type=&quot;edge&quot; data-node-from=&quot;15&quot; data-node-to=&quot;16&quot;></line>\n<line x1=&quot;41.09314727783203&quot; y1=&quot;55.2459716796875&quot; x2=&quot;40.08979797363281&quot; y2=&quot;63.27276611328125&quot; data-type=&quot;edge&quot; data-node-from=&quot;13&quot; data-node-to=&quot;14&quot;></line>\n<line x1=&quot;39.92257308959961&quot; y1=&quot;48.72420120239258&quot; x2=&quot;41.09314727783203&quot; y2=&quot;55.2459716796875&quot; data-type=&quot;edge&quot; data-node-from=&quot;12&quot; data-node-to=&quot;13&quot;></line>\n<line x1=&quot;39.92257308959961&quot; y1=&quot;48.72420120239258&quot; x2=&quot;54.136688232421875&quot; y2=&quot;45.881378173828125&quot; data-type=&quot;edge&quot; data-node-from=&quot;12&quot; data-node-to=&quot;15&quot;></line>\n<line x1=&quot;63.50128173828125&quot; y1=&quot;31.332813262939453&quot; x2=&quot;54.136688232421875&quot; y2=&quot;45.881378173828125&quot; data-type=&quot;edge&quot; data-node-from=&quot;9&quot; data-node-to=&quot;15&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;39.92257308959961&quot; y2=&quot;48.72420120239258&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;12&quot;></line>\n<line x1=&quot;68.18357849121094&quot; y1=&quot;38.69070816040039&quot; x2=&quot;63.33405685424805&quot; y2=&quot;45.21247863769531&quot; data-type=&quot;edge&quot; data-node-from=&quot;10&quot; data-node-to=&quot;11&quot;></line>\n<line x1=&quot;63.50128173828125&quot; y1=&quot;31.332813262939453&quot; x2=&quot;68.18357849121094&quot; y2=&quot;38.69070816040039&quot; data-type=&quot;edge&quot; data-node-from=&quot;9&quot; data-node-to=&quot;10&quot;></line>\n<line x1=&quot;23.200084686279297&quot; y1=&quot;40.19573211669922&quot; x2=&quot;28.21683120727539&quot; y2=&quot;47.21917724609375&quot; data-type=&quot;edge&quot; data-node-from=&quot;6&quot; data-node-to=&quot;7&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;23.200084686279297&quot; y2=&quot;40.19573211669922&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;6&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;63.50128173828125&quot; y2=&quot;31.332813262939453&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;9&quot;></line>\n<line x1=&quot;52.63166427612305&quot; y1=&quot;20.630420684814453&quot; x2=&quot;59.82233428955078&quot; y2=&quot;23.473243713378906&quot; data-type=&quot;edge&quot; data-node-from=&quot;2&quot; data-node-to=&quot;8&quot;></line>\n<line x1=&quot;38.41754913330078&quot; y1=&quot;21.633769989013672&quot; x2=&quot;27.380706787109375&quot; y2=&quot;25.31271743774414&quot; data-type=&quot;edge&quot; data-node-from=&quot;1&quot; data-node-to=&quot;4&quot;></line>\n<line x1=&quot;46.109893798828125&quot; y1=&quot;26.81774139404297&quot; x2=&quot;52.63166427612305&quot; y2=&quot;20.630420684814453&quot; data-type=&quot;edge&quot; data-node-from=&quot;3&quot; data-node-to=&quot;2&quot;></line>\n<line x1=&quot;46.109893798828125&quot; y1=&quot;26.81774139404297&quot; x2=&quot;38.41754913330078&quot; y2=&quot;21.633769989013672&quot; data-type=&quot;edge&quot; data-node-from=&quot;3&quot; data-node-to=&quot;1&quot;></line>\n<circle r=&quot;0.75&quot; cx=&quot;38.41754913330078&quot; cy=&quot;21.633769989013672&quot; data-type=&quot;element node&quot; data-element-id=&quot;1&quot; data-node-id=&quot;1&quot; data-label-id=&quot;3621&quot; data-label-name=&quot;Left Eye&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;52.63166427612305&quot; cy=&quot;20.630420684814453&quot; data-type=&quot;element node&quot; data-element-id=&quot;2&quot; data-node-id=&quot;2&quot; data-label-id=&quot;3622&quot; data-label-name=&quot;Right Eye&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;46.109893798828125&quot; cy=&quot;26.81774139404297&quot; data-type=&quot;element node&quot; data-element-id=&quot;3&quot; data-node-id=&quot;3&quot; data-label-id=&quot;3623&quot; data-label-name=&quot;Nose&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;27.380706787109375&quot; cy=&quot;25.31271743774414&quot; data-type=&quot;element node&quot; data-element-id=&quot;4&quot; data-node-id=&quot;4&quot; data-label-id=&quot;3624&quot; data-label-name=&quot;Left Ear&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;26.54458236694336&quot; cy=&quot;32.001712799072266&quot; data-type=&quot;element node&quot; data-element-id=&quot;5&quot; data-node-id=&quot;5&quot; data-label-id=&quot;3625&quot; data-label-name=&quot;Left Shoulder&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;23.200084686279297&quot; cy=&quot;40.19573211669922&quot; data-type=&quot;element node&quot; data-element-id=&quot;6&quot; data-node-id=&quot;6&quot; data-label-id=&quot;3626&quot; data-label-name=&quot;Left Elbow&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;28.21683120727539&quot; cy=&quot;47.21917724609375&quot; data-type=&quot;element node&quot; data-element-id=&quot;7&quot; data-node-id=&quot;7&quot; data-label-id=&quot;3627&quot; data-label-name=&quot;Left Wrist&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;59.82233428955078&quot; cy=&quot;23.473243713378906&quot; data-type=&quot;element node&quot; data-element-id=&quot;8&quot; data-node-id=&quot;8&quot; data-label-id=&quot;3628&quot; data-label-name=&quot;Right Ear&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;63.50128173828125&quot; cy=&quot;31.332813262939453&quot; data-type=&quot;element node&quot; data-element-id=&quot;9&quot; data-node-id=&quot;9&quot; data-label-id=&quot;3629&quot; data-label-name=&quot;Right Shoulder&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;68.18357849121094&quot; cy=&quot;38.69070816040039&quot; data-type=&quot;element node&quot; data-element-id=&quot;10&quot; data-node-id=&quot;10&quot; data-label-id=&quot;3630&quot; data-label-name=&quot;Right Elbow&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;63.33405685424805&quot; cy=&quot;45.21247863769531&quot; data-type=&quot;element node&quot; data-element-id=&quot;11&quot; data-node-id=&quot;11&quot; data-label-id=&quot;3631&quot; data-label-name=&quot;Right Wrist&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;39.92257308959961&quot; cy=&quot;48.72420120239258&quot; data-type=&quot;element node&quot; data-element-id=&quot;12&quot; data-node-id=&quot;12&quot; data-label-id=&quot;3632&quot; data-label-name=&quot;Left Hip&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;41.09314727783203&quot; cy=&quot;55.2459716796875&quot; data-type=&quot;element node&quot; data-element-id=&quot;13&quot; data-node-id=&quot;13&quot; data-label-id=&quot;3633&quot; data-label-name=&quot;Left Knee&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;40.08979797363281&quot; cy=&quot;63.27276611328125&quot; data-type=&quot;element node&quot; data-element-id=&quot;14&quot; data-node-id=&quot;14&quot; data-label-id=&quot;3634&quot; data-label-name=&quot;Left Ankle&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;54.136688232421875&quot; cy=&quot;45.881378173828125&quot; data-type=&quot;element node&quot; data-element-id=&quot;15&quot; data-node-id=&quot;15&quot; data-label-id=&quot;3635&quot; data-label-name=&quot;Right Hip&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;53.96946334838867&quot; cy=&quot;52.57037353515625&quot; data-type=&quot;element node&quot; data-element-id=&quot;16&quot; data-node-id=&quot;16&quot; data-label-id=&quot;3636&quot; data-label-name=&quot;Right Knee&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;54.136688232421875&quot; cy=&quot;61.76774215698242&quot; data-type=&quot;element node&quot; data-element-id=&quot;17&quot; data-node-id=&quot;17&quot; data-label-id=&quot;3637&quot; data-label-name=&quot;Right Ankle&quot;></circle>",
+    "raw": "<line x1=&quot;53.96946334838867&quot; y1=&quot;52.57037353515625&quot; x2=&quot;54.136688232421875&quot; y2=&quot;61.76774215698242&quot; data-type=&quot;edge&quot; data-node-from=&quot;16&quot; data-node-to=&quot;17&quot;></line>\n<line x1=&quot;54.136688232421875&quot; y1=&quot;45.881378173828125&quot; x2=&quot;53.96946334838867&quot; y2=&quot;52.57037353515625&quot; data-type=&quot;edge&quot; data-node-from=&quot;15&quot; data-node-to=&quot;16&quot;></line>\n<line x1=&quot;41.09314727783203&quot; y1=&quot;55.2459716796875&quot; x2=&quot;40.08979797363281&quot; y2=&quot;63.27276611328125&quot; data-type=&quot;edge&quot; data-node-from=&quot;13&quot; data-node-to=&quot;14&quot;></line>\n<line x1=&quot;39.92257308959961&quot; y1=&quot;48.72420120239258&quot; x2=&quot;41.09314727783203&quot; y2=&quot;55.2459716796875&quot; data-type=&quot;edge&quot; data-node-from=&quot;12&quot; data-node-to=&quot;13&quot;></line>\n<line x1=&quot;39.92257308959961&quot; y1=&quot;48.72420120239258&quot; x2=&quot;54.136688232421875&quot; y2=&quot;45.881378173828125&quot; data-type=&quot;edge&quot; data-node-from=&quot;12&quot; data-node-to=&quot;15&quot;></line>\n<line x1=&quot;63.50128173828125&quot; y1=&quot;31.332813262939453&quot; x2=&quot;54.136688232421875&quot; y2=&quot;45.881378173828125&quot; data-type=&quot;edge&quot; data-node-from=&quot;9&quot; data-node-to=&quot;15&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;39.92257308959961&quot; y2=&quot;48.72420120239258&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;12&quot;></line>\n<line x1=&quot;68.18357849121094&quot; y1=&quot;38.69070816040039&quot; x2=&quot;63.33405685424805&quot; y2=&quot;45.21247863769531&quot; data-type=&quot;edge&quot; data-node-from=&quot;10&quot; data-node-to=&quot;11&quot;></line>\n<line x1=&quot;63.50128173828125&quot; y1=&quot;31.332813262939453&quot; x2=&quot;68.18357849121094&quot; y2=&quot;38.69070816040039&quot; data-type=&quot;edge&quot; data-node-from=&quot;9&quot; data-node-to=&quot;10&quot;></line>\n<line x1=&quot;23.200084686279297&quot; y1=&quot;40.19573211669922&quot; x2=&quot;28.21683120727539&quot; y2=&quot;47.21917724609375&quot; data-type=&quot;edge&quot; data-node-from=&quot;6&quot; data-node-to=&quot;7&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;23.200084686279297&quot; y2=&quot;40.19573211669922&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;6&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;63.50128173828125&quot; y2=&quot;31.332813262939453&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;9&quot;></line>\n<line x1=&quot;52.63166427612305&quot; y1=&quot;20.630420684814453&quot; x2=&quot;59.82233428955078&quot; y2=&quot;23.473243713378906&quot; data-type=&quot;edge&quot; data-node-from=&quot;2&quot; data-node-to=&quot;8&quot;></line>\n<line x1=&quot;38.41754913330078&quot; y1=&quot;21.633769989013672&quot; x2=&quot;27.380706787109375&quot; y2=&quot;25.31271743774414&quot; data-type=&quot;edge&quot; data-node-from=&quot;1&quot; data-node-to=&quot;4&quot;></line>\n<line x1=&quot;46.109893798828125&quot; y1=&quot;26.81774139404297&quot; x2=&quot;52.63166427612305&quot; y2=&quot;20.630420684814453&quot; data-type=&quot;edge&quot; data-node-from=&quot;3&quot; data-node-to=&quot;2&quot;></line>\n<line x1=&quot;46.109893798828125&quot; y1=&quot;26.81774139404297&quot; x2=&quot;38.41754913330078&quot; y2=&quot;21.633769989013672&quot; data-type=&quot;edge&quot; data-node-from=&quot;3&quot; data-node-to=&quot;1&quot;></line>\n<circle r=&quot;0.75&quot; cx=&quot;38.41754913330078&quot; cy=&quot;21.633769989013672&quot; data-type=&quot;element node&quot; data-element-id=&quot;1&quot; data-node-id=&quot;1&quot; data-label-id=&quot;3621&quot; data-label-name=&quot;Left Eye&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;52.63166427612305&quot; cy=&quot;20.630420684814453&quot; data-type=&quot;element node&quot; data-element-id=&quot;2&quot; data-node-id=&quot;2&quot; data-label-id=&quot;3622&quot; data-label-name=&quot;Right Eye&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;46.109893798828125&quot; cy=&quot;26.81774139404297&quot; data-type=&quot;element node&quot; data-element-id=&quot;3&quot; data-node-id=&quot;3&quot; data-label-id=&quot;3623&quot; data-label-name=&quot;Nose&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;27.380706787109375&quot; cy=&quot;25.31271743774414&quot; data-type=&quot;element node&quot; data-element-id=&quot;4&quot; data-node-id=&quot;4&quot; data-label-id=&quot;3624&quot; data-label-name=&quot;Left Ear&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;26.54458236694336&quot; cy=&quot;32.001712799072266&quot; data-type=&quot;element node&quot; data-element-id=&quot;5&quot; data-node-id=&quot;5&quot; data-label-id=&quot;3625&quot; data-label-name=&quot;Left Shoulder&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;23.200084686279297&quot; cy=&quot;40.19573211669922&quot; data-type=&quot;element node&quot; data-element-id=&quot;6&quot; data-node-id=&quot;6&quot; data-label-id=&quot;3626&quot; data-label-name=&quot;Left Elbow&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;28.21683120727539&quot; cy=&quot;47.21917724609375&quot; data-type=&quot;element node&quot; data-element-id=&quot;7&quot; data-node-id=&quot;7&quot; data-label-id=&quot;3627&quot; data-label-name=&quot;Left Wrist&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;59.82233428955078&quot; cy=&quot;23.473243713378906&quot; data-type=&quot;element node&quot; data-element-id=&quot;8&quot; data-node-id=&quot;8&quot; data-label-id=&quot;3628&quot; data-label-name=&quot;Right Ear&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;63.50128173828125&quot; cy=&quot;31.332813262939453&quot; data-type=&quot;element node&quot; data-element-id=&quot;9&quot; data-node-id=&quot;9&quot; data-label-id=&quot;3629&quot; data-label-name=&quot;Right Shoulder&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;68.18357849121094&quot; cy=&quot;38.69070816040039&quot; data-type=&quot;element node&quot; data-element-id=&quot;10&quot; data-node-id=&quot;10&quot; data-label-id=&quot;3630&quot; data-label-name=&quot;Right Elbow&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;63.33405685424805&quot; cy=&quot;45.21247863769531&quot; data-type=&quot;element node&quot; data-element-id=&quot;11&quot; data-node-id=&quot;11&quot; data-label-id=&quot;3631&quot; data-label-name=&quot;Right Wrist&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;39.92257308959961&quot; cy=&quot;48.72420120239258&quot; data-type=&quot;element node&quot; data-element-id=&quot;12&quot; data-node-id=&quot;12&quot; data-label-id=&quot;3632&quot; data-label-name=&quot;Left Hip&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;41.09314727783203&quot; cy=&quot;55.2459716796875&quot; data-type=&quot;element node&quot; data-element-id=&quot;13&quot; data-node-id=&quot;13&quot; data-label-id=&quot;3633&quot; data-label-name=&quot;Left Knee&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;40.08979797363281&quot; cy=&quot;63.27276611328125&quot; data-type=&quot;element node&quot; data-element-id=&quot;14&quot; data-node-id=&quot;14&quot; data-label-id=&quot;3634&quot; data-label-name=&quot;Left Ankle&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;54.136688232421875&quot; cy=&quot;45.881378173828125&quot; data-type=&quot;element node&quot; data-element-id=&quot;15&quot; data-node-id=&quot;15&quot; data-label-id=&quot;3635&quot; data-label-name=&quot;Right Hip&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;53.96946334838867&quot; cy=&quot;52.57037353515625&quot; data-type=&quot;element node&quot; data-element-id=&quot;16&quot; data-node-id=&quot;16&quot; data-label-id=&quot;3636&quot; data-label-name=&quot;Right Knee&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;54.136688232421875&quot; cy=&quot;61.76774215698242&quot; data-type=&quot;element node&quot; data-element-id=&quot;17&quot; data-node-id=&quot;17&quot; data-label-id=&quot;3637&quot; data-label-name=&quot;Right Ankle&quot;></circle>"
+  },
+  {
+    "id": 3638,
+    "name": "falldown_person",
+    "color": "#00aa00",
+    "attributes": [],
+    "type": "skeleton",
+    "sublabels": [
+      {
+        "id": 3650,
+        "name": "Left Hip",
+        "color": "#99e1b5",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3651,
+        "name": "Left Knee",
+        "color": "#e33bf4",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3639,
+        "name": "Left Eye",
+        "color": "#07eda5",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3640,
+        "name": "Right Eye",
+        "color": "#fe9e5a",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3641,
+        "name": "Nose",
+        "color": "#c59e21",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3642,
+        "name": "Left Ear",
+        "color": "#7571dd",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3643,
+        "name": "Left Shoulder",
+        "color": "#0227c7",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3644,
+        "name": "Left Elbow",
+        "color": "#4dc53a",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3645,
+        "name": "Left Wrist",
+        "color": "#927bc3",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3646,
+        "name": "Right Ear",
+        "color": "#0b21b7",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3647,
+        "name": "Right Shoulder",
+        "color": "#dc70d6",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3648,
+        "name": "Right Elbow",
+        "color": "#5f240c",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3649,
+        "name": "Right Wrist",
+        "color": "#1c5990",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3652,
+        "name": "Left Ankle",
+        "color": "#9f4907",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3653,
+        "name": "Right Hip",
+        "color": "#8c6002",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3654,
+        "name": "Right Knee",
+        "color": "#2657c6",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      },
+      {
+        "id": 3655,
+        "name": "Right Ankle",
+        "color": "#fc5c7d",
+        "attributes": [],
+        "type": "points",
+        "has_parent": true
+      }
+    ],
+    "project_id": 168,
+    "parent_id": null,
+    "has_parent": false,
+    "svg": "<line x1=&quot;53.96946334838867&quot; y1=&quot;52.57037353515625&quot; x2=&quot;54.136688232421875&quot; y2=&quot;61.76774215698242&quot; data-type=&quot;edge&quot; data-node-from=&quot;16&quot; data-node-to=&quot;17&quot;></line>\n<line x1=&quot;54.136688232421875&quot; y1=&quot;45.881378173828125&quot; x2=&quot;53.96946334838867&quot; y2=&quot;52.57037353515625&quot; data-type=&quot;edge&quot; data-node-from=&quot;15&quot; data-node-to=&quot;16&quot;></line>\n<line x1=&quot;41.09314727783203&quot; y1=&quot;55.2459716796875&quot; x2=&quot;40.08979797363281&quot; y2=&quot;63.27276611328125&quot; data-type=&quot;edge&quot; data-node-from=&quot;13&quot; data-node-to=&quot;14&quot;></line>\n<line x1=&quot;39.92257308959961&quot; y1=&quot;48.72420120239258&quot; x2=&quot;41.09314727783203&quot; y2=&quot;55.2459716796875&quot; data-type=&quot;edge&quot; data-node-from=&quot;12&quot; data-node-to=&quot;13&quot;></line>\n<line x1=&quot;39.92257308959961&quot; y1=&quot;48.72420120239258&quot; x2=&quot;54.136688232421875&quot; y2=&quot;45.881378173828125&quot; data-type=&quot;edge&quot; data-node-from=&quot;12&quot; data-node-to=&quot;15&quot;></line>\n<line x1=&quot;63.50128173828125&quot; y1=&quot;31.332813262939453&quot; x2=&quot;54.136688232421875&quot; y2=&quot;45.881378173828125&quot; data-type=&quot;edge&quot; data-node-from=&quot;9&quot; data-node-to=&quot;15&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;39.92257308959961&quot; y2=&quot;48.72420120239258&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;12&quot;></line>\n<line x1=&quot;68.18357849121094&quot; y1=&quot;38.69070816040039&quot; x2=&quot;63.33405685424805&quot; y2=&quot;45.21247863769531&quot; data-type=&quot;edge&quot; data-node-from=&quot;10&quot; data-node-to=&quot;11&quot;></line>\n<line x1=&quot;63.50128173828125&quot; y1=&quot;31.332813262939453&quot; x2=&quot;68.18357849121094&quot; y2=&quot;38.69070816040039&quot; data-type=&quot;edge&quot; data-node-from=&quot;9&quot; data-node-to=&quot;10&quot;></line>\n<line x1=&quot;23.200084686279297&quot; y1=&quot;40.19573211669922&quot; x2=&quot;28.21683120727539&quot; y2=&quot;47.21917724609375&quot; data-type=&quot;edge&quot; data-node-from=&quot;6&quot; data-node-to=&quot;7&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;23.200084686279297&quot; y2=&quot;40.19573211669922&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;6&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;63.50128173828125&quot; y2=&quot;31.332813262939453&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;9&quot;></line>\n<line x1=&quot;52.63166427612305&quot; y1=&quot;20.630420684814453&quot; x2=&quot;59.82233428955078&quot; y2=&quot;23.473243713378906&quot; data-type=&quot;edge&quot; data-node-from=&quot;2&quot; data-node-to=&quot;8&quot;></line>\n<line x1=&quot;38.41754913330078&quot; y1=&quot;21.633769989013672&quot; x2=&quot;27.380706787109375&quot; y2=&quot;25.31271743774414&quot; data-type=&quot;edge&quot; data-node-from=&quot;1&quot; data-node-to=&quot;4&quot;></line>\n<line x1=&quot;46.109893798828125&quot; y1=&quot;26.81774139404297&quot; x2=&quot;52.63166427612305&quot; y2=&quot;20.630420684814453&quot; data-type=&quot;edge&quot; data-node-from=&quot;3&quot; data-node-to=&quot;2&quot;></line>\n<line x1=&quot;46.109893798828125&quot; y1=&quot;26.81774139404297&quot; x2=&quot;38.41754913330078&quot; y2=&quot;21.633769989013672&quot; data-type=&quot;edge&quot; data-node-from=&quot;3&quot; data-node-to=&quot;1&quot;></line>\n<circle r=&quot;0.75&quot; cx=&quot;38.41754913330078&quot; cy=&quot;21.633769989013672&quot; data-type=&quot;element node&quot; data-element-id=&quot;1&quot; data-node-id=&quot;1&quot; data-label-id=&quot;3639&quot; data-label-name=&quot;Left Eye&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;52.63166427612305&quot; cy=&quot;20.630420684814453&quot; data-type=&quot;element node&quot; data-element-id=&quot;2&quot; data-node-id=&quot;2&quot; data-label-id=&quot;3640&quot; data-label-name=&quot;Right Eye&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;46.109893798828125&quot; cy=&quot;26.81774139404297&quot; data-type=&quot;element node&quot; data-element-id=&quot;3&quot; data-node-id=&quot;3&quot; data-label-id=&quot;3641&quot; data-label-name=&quot;Nose&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;27.380706787109375&quot; cy=&quot;25.31271743774414&quot; data-type=&quot;element node&quot; data-element-id=&quot;4&quot; data-node-id=&quot;4&quot; data-label-id=&quot;3642&quot; data-label-name=&quot;Left Ear&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;26.54458236694336&quot; cy=&quot;32.001712799072266&quot; data-type=&quot;element node&quot; data-element-id=&quot;5&quot; data-node-id=&quot;5&quot; data-label-id=&quot;3643&quot; data-label-name=&quot;Left Shoulder&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;23.200084686279297&quot; cy=&quot;40.19573211669922&quot; data-type=&quot;element node&quot; data-element-id=&quot;6&quot; data-node-id=&quot;6&quot; data-label-id=&quot;3644&quot; data-label-name=&quot;Left Elbow&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;28.21683120727539&quot; cy=&quot;47.21917724609375&quot; data-type=&quot;element node&quot; data-element-id=&quot;7&quot; data-node-id=&quot;7&quot; data-label-id=&quot;3645&quot; data-label-name=&quot;Left Wrist&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;59.82233428955078&quot; cy=&quot;23.473243713378906&quot; data-type=&quot;element node&quot; data-element-id=&quot;8&quot; data-node-id=&quot;8&quot; data-label-id=&quot;3646&quot; data-label-name=&quot;Right Ear&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;63.50128173828125&quot; cy=&quot;31.332813262939453&quot; data-type=&quot;element node&quot; data-element-id=&quot;9&quot; data-node-id=&quot;9&quot; data-label-id=&quot;3647&quot; data-label-name=&quot;Right Shoulder&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;68.18357849121094&quot; cy=&quot;38.69070816040039&quot; data-type=&quot;element node&quot; data-element-id=&quot;10&quot; data-node-id=&quot;10&quot; data-label-id=&quot;3648&quot; data-label-name=&quot;Right Elbow&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;63.33405685424805&quot; cy=&quot;45.21247863769531&quot; data-type=&quot;element node&quot; data-element-id=&quot;11&quot; data-node-id=&quot;11&quot; data-label-id=&quot;3649&quot; data-label-name=&quot;Right Wrist&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;39.92257308959961&quot; cy=&quot;48.72420120239258&quot; data-type=&quot;element node&quot; data-element-id=&quot;12&quot; data-node-id=&quot;12&quot; data-label-id=&quot;3650&quot; data-label-name=&quot;Left Hip&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;41.09314727783203&quot; cy=&quot;55.2459716796875&quot; data-type=&quot;element node&quot; data-element-id=&quot;13&quot; data-node-id=&quot;13&quot; data-label-id=&quot;3651&quot; data-label-name=&quot;Left Knee&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;40.08979797363281&quot; cy=&quot;63.27276611328125&quot; data-type=&quot;element node&quot; data-element-id=&quot;14&quot; data-node-id=&quot;14&quot; data-label-id=&quot;3652&quot; data-label-name=&quot;Left Ankle&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;54.136688232421875&quot; cy=&quot;45.881378173828125&quot; data-type=&quot;element node&quot; data-element-id=&quot;15&quot; data-node-id=&quot;15&quot; data-label-id=&quot;3653&quot; data-label-name=&quot;Right Hip&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;53.96946334838867&quot; cy=&quot;52.57037353515625&quot; data-type=&quot;element node&quot; data-element-id=&quot;16&quot; data-node-id=&quot;16&quot; data-label-id=&quot;3654&quot; data-label-name=&quot;Right Knee&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;54.136688232421875&quot; cy=&quot;61.76774215698242&quot; data-type=&quot;element node&quot; data-element-id=&quot;17&quot; data-node-id=&quot;17&quot; data-label-id=&quot;3655&quot; data-label-name=&quot;Right Ankle&quot;></circle>",
+    "raw": "<line x1=&quot;53.96946334838867&quot; y1=&quot;52.57037353515625&quot; x2=&quot;54.136688232421875&quot; y2=&quot;61.76774215698242&quot; data-type=&quot;edge&quot; data-node-from=&quot;16&quot; data-node-to=&quot;17&quot;></line>\n<line x1=&quot;54.136688232421875&quot; y1=&quot;45.881378173828125&quot; x2=&quot;53.96946334838867&quot; y2=&quot;52.57037353515625&quot; data-type=&quot;edge&quot; data-node-from=&quot;15&quot; data-node-to=&quot;16&quot;></line>\n<line x1=&quot;41.09314727783203&quot; y1=&quot;55.2459716796875&quot; x2=&quot;40.08979797363281&quot; y2=&quot;63.27276611328125&quot; data-type=&quot;edge&quot; data-node-from=&quot;13&quot; data-node-to=&quot;14&quot;></line>\n<line x1=&quot;39.92257308959961&quot; y1=&quot;48.72420120239258&quot; x2=&quot;41.09314727783203&quot; y2=&quot;55.2459716796875&quot; data-type=&quot;edge&quot; data-node-from=&quot;12&quot; data-node-to=&quot;13&quot;></line>\n<line x1=&quot;39.92257308959961&quot; y1=&quot;48.72420120239258&quot; x2=&quot;54.136688232421875&quot; y2=&quot;45.881378173828125&quot; data-type=&quot;edge&quot; data-node-from=&quot;12&quot; data-node-to=&quot;15&quot;></line>\n<line x1=&quot;63.50128173828125&quot; y1=&quot;31.332813262939453&quot; x2=&quot;54.136688232421875&quot; y2=&quot;45.881378173828125&quot; data-type=&quot;edge&quot; data-node-from=&quot;9&quot; data-node-to=&quot;15&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;39.92257308959961&quot; y2=&quot;48.72420120239258&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;12&quot;></line>\n<line x1=&quot;68.18357849121094&quot; y1=&quot;38.69070816040039&quot; x2=&quot;63.33405685424805&quot; y2=&quot;45.21247863769531&quot; data-type=&quot;edge&quot; data-node-from=&quot;10&quot; data-node-to=&quot;11&quot;></line>\n<line x1=&quot;63.50128173828125&quot; y1=&quot;31.332813262939453&quot; x2=&quot;68.18357849121094&quot; y2=&quot;38.69070816040039&quot; data-type=&quot;edge&quot; data-node-from=&quot;9&quot; data-node-to=&quot;10&quot;></line>\n<line x1=&quot;23.200084686279297&quot; y1=&quot;40.19573211669922&quot; x2=&quot;28.21683120727539&quot; y2=&quot;47.21917724609375&quot; data-type=&quot;edge&quot; data-node-from=&quot;6&quot; data-node-to=&quot;7&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;23.200084686279297&quot; y2=&quot;40.19573211669922&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;6&quot;></line>\n<line x1=&quot;26.54458236694336&quot; y1=&quot;32.001712799072266&quot; x2=&quot;63.50128173828125&quot; y2=&quot;31.332813262939453&quot; data-type=&quot;edge&quot; data-node-from=&quot;5&quot; data-node-to=&quot;9&quot;></line>\n<line x1=&quot;52.63166427612305&quot; y1=&quot;20.630420684814453&quot; x2=&quot;59.82233428955078&quot; y2=&quot;23.473243713378906&quot; data-type=&quot;edge&quot; data-node-from=&quot;2&quot; data-node-to=&quot;8&quot;></line>\n<line x1=&quot;38.41754913330078&quot; y1=&quot;21.633769989013672&quot; x2=&quot;27.380706787109375&quot; y2=&quot;25.31271743774414&quot; data-type=&quot;edge&quot; data-node-from=&quot;1&quot; data-node-to=&quot;4&quot;></line>\n<line x1=&quot;46.109893798828125&quot; y1=&quot;26.81774139404297&quot; x2=&quot;52.63166427612305&quot; y2=&quot;20.630420684814453&quot; data-type=&quot;edge&quot; data-node-from=&quot;3&quot; data-node-to=&quot;2&quot;></line>\n<line x1=&quot;46.109893798828125&quot; y1=&quot;26.81774139404297&quot; x2=&quot;38.41754913330078&quot; y2=&quot;21.633769989013672&quot; data-type=&quot;edge&quot; data-node-from=&quot;3&quot; data-node-to=&quot;1&quot;></line>\n<circle r=&quot;0.75&quot; cx=&quot;38.41754913330078&quot; cy=&quot;21.633769989013672&quot; data-type=&quot;element node&quot; data-element-id=&quot;1&quot; data-node-id=&quot;1&quot; data-label-id=&quot;3639&quot; data-label-name=&quot;Left Eye&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;52.63166427612305&quot; cy=&quot;20.630420684814453&quot; data-type=&quot;element node&quot; data-element-id=&quot;2&quot; data-node-id=&quot;2&quot; data-label-id=&quot;3640&quot; data-label-name=&quot;Right Eye&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;46.109893798828125&quot; cy=&quot;26.81774139404297&quot; data-type=&quot;element node&quot; data-element-id=&quot;3&quot; data-node-id=&quot;3&quot; data-label-id=&quot;3641&quot; data-label-name=&quot;Nose&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;27.380706787109375&quot; cy=&quot;25.31271743774414&quot; data-type=&quot;element node&quot; data-element-id=&quot;4&quot; data-node-id=&quot;4&quot; data-label-id=&quot;3642&quot; data-label-name=&quot;Left Ear&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;26.54458236694336&quot; cy=&quot;32.001712799072266&quot; data-type=&quot;element node&quot; data-element-id=&quot;5&quot; data-node-id=&quot;5&quot; data-label-id=&quot;3643&quot; data-label-name=&quot;Left Shoulder&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;23.200084686279297&quot; cy=&quot;40.19573211669922&quot; data-type=&quot;element node&quot; data-element-id=&quot;6&quot; data-node-id=&quot;6&quot; data-label-id=&quot;3644&quot; data-label-name=&quot;Left Elbow&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;28.21683120727539&quot; cy=&quot;47.21917724609375&quot; data-type=&quot;element node&quot; data-element-id=&quot;7&quot; data-node-id=&quot;7&quot; data-label-id=&quot;3645&quot; data-label-name=&quot;Left Wrist&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;59.82233428955078&quot; cy=&quot;23.473243713378906&quot; data-type=&quot;element node&quot; data-element-id=&quot;8&quot; data-node-id=&quot;8&quot; data-label-id=&quot;3646&quot; data-label-name=&quot;Right Ear&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;63.50128173828125&quot; cy=&quot;31.332813262939453&quot; data-type=&quot;element node&quot; data-element-id=&quot;9&quot; data-node-id=&quot;9&quot; data-label-id=&quot;3647&quot; data-label-name=&quot;Right Shoulder&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;68.18357849121094&quot; cy=&quot;38.69070816040039&quot; data-type=&quot;element node&quot; data-element-id=&quot;10&quot; data-node-id=&quot;10&quot; data-label-id=&quot;3648&quot; data-label-name=&quot;Right Elbow&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;63.33405685424805&quot; cy=&quot;45.21247863769531&quot; data-type=&quot;element node&quot; data-element-id=&quot;11&quot; data-node-id=&quot;11&quot; data-label-id=&quot;3649&quot; data-label-name=&quot;Right Wrist&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;39.92257308959961&quot; cy=&quot;48.72420120239258&quot; data-type=&quot;element node&quot; data-element-id=&quot;12&quot; data-node-id=&quot;12&quot; data-label-id=&quot;3650&quot; data-label-name=&quot;Left Hip&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;41.09314727783203&quot; cy=&quot;55.2459716796875&quot; data-type=&quot;element node&quot; data-element-id=&quot;13&quot; data-node-id=&quot;13&quot; data-label-id=&quot;3651&quot; data-label-name=&quot;Left Knee&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;40.08979797363281&quot; cy=&quot;63.27276611328125&quot; data-type=&quot;element node&quot; data-element-id=&quot;14&quot; data-node-id=&quot;14&quot; data-label-id=&quot;3652&quot; data-label-name=&quot;Left Ankle&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;54.136688232421875&quot; cy=&quot;45.881378173828125&quot; data-type=&quot;element node&quot; data-element-id=&quot;15&quot; data-node-id=&quot;15&quot; data-label-id=&quot;3653&quot; data-label-name=&quot;Right Hip&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;53.96946334838867&quot; cy=&quot;52.57037353515625&quot; data-type=&quot;element node&quot; data-element-id=&quot;16&quot; data-node-id=&quot;16&quot; data-label-id=&quot;3654&quot; data-label-name=&quot;Right Knee&quot;></circle>\n<circle r=&quot;0.75&quot; cx=&quot;54.136688232421875&quot; cy=&quot;61.76774215698242&quot; data-type=&quot;element node&quot; data-element-id=&quot;17&quot; data-node-id=&quot;17&quot; data-label-id=&quot;3655&quot; data-label-name=&quot;Right Ankle&quot;></circle>"
+  }
+]
