@@ -9,7 +9,7 @@ from math import ceil
 from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import csv
-
+from itertools import cycle
 
 load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
 CVAT_URL = os.getenv("CVAT_URL_2")
@@ -239,7 +239,8 @@ def run_yolo_and_create_json_parallel(images, output_json_path, model0, model1):
 def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees, project_name, batch_size=100):
     model0 = YOLO("yolov8s.pt").to("cuda:0")
     model1 = YOLO("yolov8s.pt").to("cuda:1")
-    num_users = len(assignees)
+    # num_users = len(assignees)
+    assignee_cycle = cycle(assignees)
     print(f"✅ GPU 사용 확인: {torch.cuda.get_device_name(0)}, {torch.cuda.get_device_name(1)}")
     for group_dir in image_root_dir.rglob("*"):
         if not group_dir.is_dir(): continue
@@ -266,7 +267,8 @@ def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees
                 print(f"[CVAT] Task {task_name} 초기화 실패")
                 continue
             jobs = get_jobs(task_id, headers)
-            assignee_name = assignees[i % num_users] if num_users > 0 else None
+            # assignee_name = assignees[i % num_users] if num_users > 0 else None
+            assignee_name = next(assignee_cycle)
             if assignee_name:
                 assign_jobs_to_one_user(jobs, headers, assignee_name)
                 log_assignment(task_name, task_id, assignee_name, len(jobs),project_name)
