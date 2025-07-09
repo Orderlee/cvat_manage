@@ -141,33 +141,41 @@ def assign_jobs_to_one_user(jobs, headers, assignee_name):
 def get_user_display_name(username):
     return os.getenv(f"USERMAP_{username}", username)
 
-def log_assignment(task_name, task_id, assignee_name, num_jobs):
-
-    now = datetime.now().strftime("%d/%m/%Y %H:%M")
+def log_assignment(task_name, task_id, assignee_name, project_name):
+    now_str = datetime.now().strftime("%Y/%m/%d %H:%M")
     display_name = get_user_display_name(assignee_name)
-    log_entry = [now, task_name, task_id, display_name, num_jobs]
-    log_columns = ["timestamp", "task_name", "task_id", "assignee", "num_jobs"]
 
-    if not ASSIGN_LOG_PATH.exists():
-        with open(ASSIGN_LOG_PATH, mode="w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow(log_columns)
-            writer.writerow(log_entry)
-        return
+    log_columns = [
+        "timestamp", "organization", "project",
+        "task_name", "task_id", "assignee", 
+    ]
 
-    # 기존 로그 읽기
-    with open(ASSIGN_LOG_PATH, mode="r", newline="", encoding="utf-8") as f:
-        reader = list(csv.reader(f))
-        header = reader[0]
-        rows = reader[1:]
+    new_entry = {
+        "timestamp": now_str,
+        "organization": ORGANIZATION,
+        "project" : project_name,
+        "task_name": task_name,
+        "task_id": task_id,
+        "assignee": display_name
+    }
+
+    rows = []
+
+    # 기존 파일이 있다면 읽고 append
+    if ASSIGN_LOG_PATH.exists():
+        with open(ASSIGN_LOG_PATH, "r", newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
     
-    # timestamp 기준 내림차순정렬
-    rows.sort(key=lambda r: datetime.strptime(r[0], "%d/%m/%Y %H:%M"), reverse=True)
+    rows.append(new_entry)
 
-    # 다시 저장
-    with open(ASSIGN_LOG_PATH, mode="w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(header)
+    # timestamp 기준 내림차순 정렬
+    rows.sort(key=lambda r: datetime.strptime(f["timestamp"], "%Y/%m/%d %H:%M"), reverse=True)
+
+    # 정렬된 로그 다시 전체 저장
+    with open(ASSIGN_LOG_PATH, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=log_columns)
+        writer.writeheader()
         writer.writerows(rows)
 
 
@@ -228,7 +236,7 @@ def run_yolo_and_create_json_parallel(images, output_json_path, model0, model1):
         json.dump(coco, f, indent=2)
     print(f"✅ 전체 YOLO 추론 시간: {time.time() - start_all:.2f}초")
 
-def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees, batch_size=100):
+def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees, project_name, batch_size=100):
     model0 = YOLO("yolov8s.pt").to("cuda:0")
     model1 = YOLO("yolov8s.pt").to("cuda:1")
     num_users = len(assignees)
@@ -261,7 +269,7 @@ def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees
             assignee_name = assignees[i % num_users] if num_users > 0 else None
             if assignee_name:
                 assign_jobs_to_one_user(jobs, headers, assignee_name)
-                log_assignment(task_name, task_id, assignee_name, len(jobs))
+                log_assignment(task_name, task_id, assignee_name, len(jobs),project_name)
 
 
 if __name__ == "__main__":
@@ -276,4 +284,4 @@ if __name__ == "__main__":
     org_id, org_slug = get_or_create_organization(args.org_name)
     headers = build_headers(org_slug)
     project_id = create_project(args.project_name, labels=args.labels, headers=headers)
-    compress_and_upload_all(image_dir, project_id, headers, assignees=args.assignees, batch_size=100)
+    compress_and_upload_all(image_dir, project_id, headers, assignees=args.assignees, project_name=args.project_name, batch_size=100)
