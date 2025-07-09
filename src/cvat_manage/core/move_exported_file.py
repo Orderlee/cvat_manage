@@ -157,7 +157,7 @@ def move_zip_to_corresponding_folder(result_dir: Path, dest_dir: Path):
         print("❌ 이동할 zip 파일이 없습니다.")
         return
     
-    moved_log_path = Path("/home/pia/work_p/dfn/omission/result/moved_log.csv")
+    moved_log_path = Path("./moved_log.csv")
 
     is_new_log = not moved_log_path.exists()
 
