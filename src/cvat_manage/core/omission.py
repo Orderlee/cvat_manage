@@ -27,19 +27,12 @@ load_dotenv(dotenv_path=env_path)
 
 CVAT_URL = os.getenv("CVAT_URL_2")
 TOKEN = os.getenv("TOKEN_2")
-ORGANIZATION = os.getenv("ORGANIZATION")
+# ORGANIZATION = os.getenv("ORGANIZATION")
+ORGANIZATION_LIST = [os.getenv("ORGANIZATION"), os.getenv("ORGANIZATION_2")]
+ORGANIZATION_LIST = [o for o in ORGANIZATION_LIST if o]
 # ORGANIZATION_LIST = [org.strip() for org in os.getenv("ORGANIZATION", "").split(",") if org.strip()]
 # ORG_FILTER = os.getenv("ORGANIZATION_FILTER")
 # USER_FILTER = os.getenv("USER_FILTER")
-
-
-
-# Email settings
-EMAIL_SENDER = os.getenv("EMAIL_SENDER")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
-EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER")
-SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
 
 # Date filtering
 DATE_FROM = os.getenv("DATE_FROM")
@@ -169,11 +162,11 @@ def main(quiet=False):
         #     continue
 
         # 필터링 시 여러 개 중 하나라도 해당하는 경우 통과
-        # if ORGANIZATION_LIST and org_name not in ORGANIZATION_LIST:
-        #     continue
-
-        if ORGANIZATION and ORGANIZATION != org_name:
+        if ORGANIZATION_LIST and org_name not in ORGANIZATION_LIST:
             continue
+
+        # if ORGANIZATION and ORGANIZATION != org_name:
+        #     continue
 
         # assignee = job.get("assignee")
         # assignee_username = assignee["username"] if assignee else "(Unassigned)"
