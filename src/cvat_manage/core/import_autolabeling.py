@@ -11,10 +11,12 @@ import pandas as pd
 import csv
 from itertools import cycle
 
-load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
+
+env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(dotenv_path=env_path)
 CVAT_URL = os.getenv("CVAT_URL_2")
 TOKEN = os.getenv("TOKEN_2")
-ORGANIZATION = os.getenv("ORGANIZATION")
+ORGANIZATIONS = [org.strip() for org in os.getenv("ORGANIZATIONS", "").split(",")]
 ASSIGN_LOG_PATH = Path(f"./logs/assignments_log.csv")
 ASSIGN_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 
@@ -141,44 +143,133 @@ def assign_jobs_to_one_user(jobs, headers, assignee_name):
 def get_user_display_name(username):
     return os.getenv(f"USERMAP_{username}", username)
 
-def log_assignment(task_name, task_id, assignee_name, project_name):
-    now_str = datetime.now().strftime("%Y/%m/%d %H:%M")
-    display_name = get_user_display_name(assignee_name)
+## 기존 코드
+# def log_assignment(task_name, task_id, assignee_name, num_jobs):
+
+#     now = datetime.now().strftime("%d/%m/%Y %H:%M")
+#     display_name = get_user_display_name(assignee_name)
+#     log_entry = [now, task_name, task_id, display_name, num_jobs]
+#     log_columns = ["timestamp", "task_name", "task_id", "assignee", "num_jobs"]
+
+#     if not ASSIGN_LOG_PATH.exists():
+#         with open(ASSIGN_LOG_PATH, mode="w", newline="", encoding="utf-8") as f:
+#             writer = csv.writer(f)
+#             writer.writerow(log_columns)
+#             writer.writerow(log_entry)
+#         return
+
+#     # 기존 로그 읽기
+#     with open(ASSIGN_LOG_PATH, mode="r", newline="", encoding="utf-8") as f:
+#         reader = list(csv.reader(f))
+#         header = reader[0]
+#         rows = reader[1:]
+    
+#     # timestamp 기준 내림차순정렬
+#     rows.sort(key=lambda r: datetime.strptime(r[0], "%d/%m/%Y %H:%M"), reverse=True)
+
+#     # 다시 저장
+#     with open(ASSIGN_LOG_PATH, mode="w", newline="", encoding="utf-8") as f:
+#         writer = csv.writer(f)
+#         writer.writerow(header)
+#         writer.writerows(rows)
+
+def log_assignment(task_name, task_id, assignee_name, num_jobs, project_name):
+    
+    now_dt = datetime.now()
+    now_str = now_dt.strftime("%Y/%m/%d %H:%M")
 
     log_columns = [
         "timestamp", "organization", "project",
-        "task_name", "task_id", "assignee", 
+        "task_name", "task_id", "assignee", "num_jobs"
     ]
+    display_name = get_user_display_name(assignee_name)
 
-    new_entry = {
+    log_entry_dict = {
         "timestamp": now_str,
         "organization": ORGANIZATION,
-        "project" : project_name,
+        "project": project_name,
         "task_name": task_name,
         "task_id": task_id,
-        "assignee": display_name
+        "assignee": display_name,
+        "num_jobs": num_jobs
     }
 
-    rows = []
-
-    # 기존 파일이 있다면 읽고 append
-    if ASSIGN_LOG_PATH.exists():
-        with open(ASSIGN_LOG_PATH, "r", newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            rows = list(reader)
+    if not ASSIGN_LOG_PATH.exists():
+        with open(ASSIGN_LOG_PATH, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=log_columns)
+            writer.writeheader()
+            writer.writerow(log_entry_dict)
+        return
     
-    rows.append(new_entry)
+    # 기존 파일 읽기
+    with open(ASSIGN_LOG_PATH, "r", newline="", encoding="utf-8") as f:
+        reader = list(csv.DictReader(f))
+        rows = []
 
-    # timestamp 기준 내림차순 정렬
-    rows.sort(key=lambda r: datetime.strptime(f["timestamp"], "%Y/%m/%d %H:%M"), reverse=True)
+        for r in reader:
+            completed_row = {col: r.get(col, "") for col in log_columns}
+            rows.append(completed_row)
 
-    # 정렬된 로그 다시 전체 저장
+    # 새 항목 추가
+    rows.append(log_entry_dict)
+
+    # timestamp 파싱 함수
+    def parse_timestamp(ts):
+        for fmt in ("%d/%m/%Y %H:%M", "%Y/%m/%d %H:%M"):
+            try:
+                return datetime.strptime(ts, fmt)
+            except ValueError:
+                continue
+        print(f"[⚠️] 잘못된 날짜 포맷: {ts}")
+        return datetime.min
+    
+    # 내림차순 정렬
+    rows.sort(key=lambda r: parse_timestamp(r["timestamp"]), reverse=True)
+
+    # 다시 저장
     with open(ASSIGN_LOG_PATH, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=log_columns)
         writer.writeheader()
         writer.writerows(rows)
 
+# # 변경이 완료되면 이걸로 변경해야함
+# def log_assignment(task_name, task_id, assignee_name, num_jobs, project_name):
+#     now_str = datetime.now().strftime("%Y/%m/%d %H:%M")
+#     display_name = get_user_display_name(assignee_name)
 
+#     log_columns = [
+#         "timestamp", "organization", "project",
+#         "task_name", "task_id", "assignee", "num_jobs"
+#     ]
+
+#     new_entry = {
+#         "timestamp": now_str,
+#         "organization": ORGANIZATION,
+#         "project" : project_name,
+#         "task_name": task_name,
+#         "task_id": task_id,
+#         "assignee": display_name,
+#         "num_jobs": num_jobs
+#     }
+
+#     rows = []
+
+#     # 기존 파일이 있다면 읽고 append
+#     if ASSIGN_LOG_PATH.exists():
+#         with open(ASSIGN_LOG_PATH, "r", newline="", encoding="utf-8") as f:
+#             reader = csv.DictReader(f)
+#             rows = list(reader)
+    
+#     rows.append(new_entry)
+
+#     # timestamp 기준 내림차순 정렬
+#     rows.sort(key=lambda r: datetime.strptime(r["timestamp"], "%Y/%m/%d %H:%M"), reverse=True)
+
+#     # 정렬된 로그 다시 전체 저장
+#     with open(ASSIGN_LOG_PATH, "w", newline="", encoding="utf-8") as f:
+#         writer = csv.DictWriter(f, fieldnames=log_columns)
+#         writer.writeheader()
+#         writer.writerows(rows)
 
 
 def run_yolo_on_image(model, img_path, image_id, annotation_id_start):
@@ -271,7 +362,7 @@ def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees
             assignee_name = next(assignee_cycle)
             if assignee_name:
                 assign_jobs_to_one_user(jobs, headers, assignee_name)
-                log_assignment(task_name, task_id, assignee_name, len(jobs),project_name)
+                log_assignment(task_name, task_id, assignee_name, len(jobs), project_name)
 
 
 if __name__ == "__main__":
@@ -282,6 +373,10 @@ if __name__ == "__main__":
     parser.add_argument("--labels", type=str, nargs="+", required=True)
     parser.add_argument("--assignees", type=str, nargs="+", required=True)
     args = parser.parse_args()
+
+    if args.org_name not in ORGANIZATIONS:
+        raise ValueError(f"❌ 지정된 조직({args.org_name})이 .env의 조직 리스트에 없습니다: {ORGANIZATIONS}")
+    
     image_dir = Path(args.image_dir)
     org_id, org_slug = get_or_create_organization(args.org_name)
     headers = build_headers(org_slug)

@@ -18,7 +18,7 @@ CVAT_PASSWORD = os.getenv("CVAT_PASSWORD")
 CVAT_EXPORT_FORMAT = os.getenv("CVAT_EXPORT_FORMAT")
 CVAT_EXPORT_FORMAT_4 = os.getenv("CVAT_EXPORT_FORMAT_4")  # skeleton 용 포맷
 WITH_IMAGES = os.getenv("WITH_IMAGES")
-ORG_FILTER = os.getenv("ORGANIZATION_FILTER")
+ORGANIZATIONS = os.getenv("ORGANIZATIONS", "").split(",")
 RESULT_DIR = os.getenv("RESULT_DIR", "/tmp/cvat_exports")
 
 HEADERS = {
@@ -101,7 +101,6 @@ def get_label_types_from_annotations(job_id):
 
 def run_cvat_cli_export(task_id: int, task_name: str, assignee: str, result_dir: Path, export_log_path: Path, assignee_map: dict, export_format: str):
     safe_name = task_name.replace(" ", "-")
-    # output_path = result_dir / f"{safe_name}_{export_format}.zip"
     exported_date = datetime.today().strftime("%Y-%m-%d")
 
     # export_format 값에 따라 결정
@@ -143,9 +142,8 @@ def main():
     jobs = get_all_jobs()
 
     today_str = datetime.today().strftime("%Y-%m-%d")
-    # result_dir = Path(f"{RESULT_DIR}/{today_str}")
+    
     base_result_dir = Path(RESULT_DIR)
-    # result_dir.mkdir(parents=True, exist_ok=True)
 
     export_log_path = Path("/home/pia/work_p/dfn/omission/result/export_log.csv")
 
@@ -176,18 +174,18 @@ def main():
 
         task_info = get_task_info(int(task_id))
         task_name = task_info.get("name", f"task_{task_id}")
-        task_org_id = task_info.get("organization")
-        task_org_slug = get_organization_name(task_org_id)
+        org_slug = get_organization_name(task_info.get("organization"))
 
-        if ORG_FILTER and task_org_slug != ORG_FILTER:
+        if org_slug not in ORGANIZATIONS:
             continue
 
+        
         assignee_info = job.get("assignee")
         assignee = assignee_info.get("username", "(unassigned)") if assignee_info else "(unassigned)"
 
         label_types = get_label_types_from_annotations(int(job["id"]))
 
-        result_dir = base_result_dir / today_str / task_org_slug / task_name.replace(" ", "_")
+        result_dir = base_result_dir / today_str / org_slug / task_name.replace(" ", "_")
         result_dir.mkdir(parents=True, exist_ok=True)
 
         exported = False

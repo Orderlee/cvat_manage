@@ -27,10 +27,10 @@ load_dotenv(dotenv_path=env_path)
 
 CVAT_URL = os.getenv("CVAT_URL_2")
 TOKEN = os.getenv("TOKEN_2")
+ORGANIZATION_LIST = [org.strip() for org in os.getenv("ORGANIZATIONS", "").split(",") if org.strip()]
+
+
 # ORGANIZATION = os.getenv("ORGANIZATION")
-ORGANIZATION_LIST = [os.getenv("ORGANIZATION"), os.getenv("ORGANIZATION_2")]
-ORGANIZATION_LIST = [o for o in ORGANIZATION_LIST if o]
-# ORGANIZATION_LIST = [org.strip() for org in os.getenv("ORGANIZATION", "").split(",") if org.strip()]
 # ORG_FILTER = os.getenv("ORGANIZATION_FILTER")
 # USER_FILTER = os.getenv("USER_FILTER")
 
@@ -143,9 +143,9 @@ def main(quiet=False):
             frame_count = stop_frame - start_frame + 1 if stop_frame >= start_frame else 0
             completed_frame_stats[username] += frame_count
 
-        assignee = job.get("assignee")
-        assignee_username = assignee["username"] if assignee else "(Unassigned)"
-        assignee_display = get_user_display_name(assignee_username)
+        # assignee = job.get("assignee")
+        # assignee_username = assignee["username"] if assignee else "(Unassigned)"
+        # assignee_display = get_user_display_name(assignee_username)
 
         if task_id not in task_cache:
             task_cache[task_id] = get_task_name(task_id)
@@ -168,9 +168,9 @@ def main(quiet=False):
         # if ORGANIZATION and ORGANIZATION != org_name:
         #     continue
 
-        # assignee = job.get("assignee")
-        # assignee_username = assignee["username"] if assignee else "(Unassigned)"
-        # assignee_display = get_user_display_name(assignee_username)
+        assignee = job.get("assignee")
+        assignee_username = assignee["username"] if assignee else "(Unassigned)"
+        assignee_display = get_user_display_name(assignee_username)
         # if USER_FILTER and USER_FILTER != assignee_str:
         #     continue
 
@@ -233,33 +233,36 @@ def main(quiet=False):
         print(f"📄 CSV 저장 완료: {csv_filename}")
 
     # 📌 프로젝트별 작업자 누락률 요약
-    print("\n📌 Project별 작업자 Omission Rate 요약:")
-    project_user_stats = defaultdict(lambda: defaultdict(lambda: {"jobs": 0, "missing": 0, "frames": 0}))
+    print("\n📌 Organization +  Project별 작업자 Omission Rate 요약:")
+    org_project_user_stats = defaultdict(lambda: defaultdict(lambda: defaultdict (lambda: {"jobs": 0, "missing": 0, "frames": 0})))
+    
 
     for row in results:
+        org = row["organization"]
         project = row["project"]
         user = row["assignee"]
         total_frames = row["missing_count"] + row["label_count"]
-        project_user_stats[project][user]["jobs"] += 1
-        project_user_stats[project][user]["missing"] += row["missing_count"]
-        project_user_stats[project][user]["frames"] += total_frames
+        org_project_user_stats[org][project][user]["jobs"] += 1
+        org_project_user_stats[org][project][user]["missing"] += row["missing_count"]
+        org_project_user_stats[org][project][user]["frames"] += total_frames
 
-    for project, users in project_user_stats.items():
-        print(f"\n📌 [{project}]")
-        for user, stat in users.items():
-            frames = stat["frames"]
-            missing = stat["missing"]
-            jobs = stat["jobs"]
-            rate = round(missing / frames * 100, 2) if frames else 0
-            print(f" - {user} → Job: {jobs}개 | Omission Rate: {rate}% ({missing} / {frames})")
+    for org, projects in org_project_user_stats.items():
+        print(f"\n🏢 [Organization: {org}]")
+        for project, users in projects.items():
+            print(f"📂 [Project: {project}]")
+            for user, stat in users.items():
+                frames = stat["frames"]
+                missing = stat["missing"]
+                jobs = stat["jobs"]
+                rate = round(missing / frames * 100, 2) if frames else 0
+                print(f" - {user} → Job: {jobs}개 | Omission Rate: {rate}% ({missing} / {frames})")
 
-
-    # 📌 어노테이션 상태별 통계
-    print("\n📌 Project별 Annotation Status Statistics:")
+    # 📌 Organization + Project별 Annotation 상태 통계
+    print("\n📌 Organization + Project별 Annotation Status Statistics:")
 
     df = pd.DataFrame(results)
     # state + stage 조합을 통한 상태명 매핑
-    grouped = df.groupby(["project", "stage", "state"]).size().reset_index(name="count")
+    grouped = df.groupby(["organization", "project", "stage", "state"]).size().reset_index(name="count")
 
     # 출력용 매핑
     state_mapping = {
@@ -268,21 +271,24 @@ def main(quiet=False):
         "completed": "completed",
     }
 
-    for project_name in grouped["project"].unique():
-        print(f"\n📌 [{project_name}]Annotation Status Statistics:")
-        sub = grouped[grouped["project"] == project_name]
-        for _, row in sub.iterrows():
-            stage = row["stage"]
-            state = row["state"]
-            count = row["count"]
+    for org_name in grouped["organization"].unique():
+        print(f"\n🏢 [Organization: {org_name}]")
+        org_df = grouped[grouped["organization"] == org_name]
+        for project_name in org_df["project"].unique():
+            print(f"📂 [Project: {project_name}] Annotation Status Statistics:")
+            sub = org_df[org_df["project"] == project_name]
+            for _, row in sub.iterrows():
+                stage = row["stage"]
+                state = row["state"]
+                count = row["count"]
 
-            # stage가 None이면 건너뜀
-            if not stage:
-                continue
+                # stage가 None이면 건너뜀
+                if not stage:
+                    continue
 
-            stage_label = stage
-            state_label = state_mapping.get(state, state)
-            print(f" - {stage_label} {state_label}: {count}개")
+                stage_label = stage
+                state_label = state_mapping.get(state, state)
+                print(f" - {stage_label} {state_label}: {count}개")
 
 
 if __name__ == "__main__":

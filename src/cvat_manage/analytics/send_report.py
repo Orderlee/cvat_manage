@@ -225,20 +225,23 @@ def send_email_via_graph(targets, subject, body):
     else:
         print(f"❌ Graph API 이메일 전송 실패: {response.status_code}, {response.text}")
 
+def parse_targets_from_env():
+    organizations = os.getenv("ORGANIZATIONS", "").split(",")
+    targets = []
+    for csv_file in get_recent_csv_files(N):
+        df = pd.read_csv(csv_file)
+        for org in organizations:
+            projects = df[df["organization"] == org]["project"].unique()
+            for project in projects:
+                targets.append((org, project))
+    return list(set(targets))
+
+
 if __name__ == "__main__":
     N = 5
     recent_files = get_recent_csv_files(N)
 
-    # targets = [
-    #     ("thailabeling", "ad_lib_weapon"),
-    #     ("thailabeling", "ad_lib")
-    # ]
-    args = parse_args()
-    if not args.targets:
-        print("❌ 전달된 targets 없음 --targets thailabeling:ad_lib ... 형태로 지정해야 합니다.")
-        sys.exit(1)
-    
-    targets = [tuple(t.split(":")) for t in args.targets]
+    targets = parse_targets_from_env()
 
     for org, proj in targets:
         prefix = f"{org}_{proj}"
@@ -253,7 +256,7 @@ if __name__ == "__main__":
         plot_daily_completed_images(df_filtered, prefix, org, proj)
         plot_user_labelcount_by_day(df_filtered, prefix, org, proj)
         plot_daily_labeled_objects(df_filtered, prefix, org, proj)
-
+        
     summary_text = "👥 Annotator Report Summary:\n\n"
     summary_text += "This is a report summarizing the annotation work performed by annotators.\n"
 
