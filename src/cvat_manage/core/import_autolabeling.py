@@ -173,7 +173,7 @@ def get_user_display_name(username):
 #         writer.writerow(header)
 #         writer.writerows(rows)
 
-def log_assignment(task_name, task_id, assignee_name, num_jobs, project_name):
+def log_assignment(task_name, task_id, assignee_name, num_jobs, project_name, organization):
     
     now_dt = datetime.now()
     now_str = now_dt.strftime("%Y/%m/%d %H:%M")
@@ -186,7 +186,7 @@ def log_assignment(task_name, task_id, assignee_name, num_jobs, project_name):
 
     log_entry_dict = {
         "timestamp": now_str,
-        "organization": ORGANIZATIONS,
+        "organization": organization,
         "project": project_name,
         "task_name": task_name,
         "task_id": task_id,
@@ -327,7 +327,7 @@ def run_yolo_and_create_json_parallel(images, output_json_path, model0, model1):
         json.dump(coco, f, indent=2)
     print(f"✅ 전체 YOLO 추론 시간: {time.time() - start_all:.2f}초")
 
-def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees, project_name, batch_size=100):
+def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees, project_name, batch_size=100, organization=""):
     model0 = YOLO("yolov8s.pt").to("cuda:0")
     model1 = YOLO("yolov8s.pt").to("cuda:1")
     # num_users = len(assignees)
@@ -362,7 +362,7 @@ def compress_and_upload_all(image_root_dir: Path, project_id, headers, assignees
             assignee_name = next(assignee_cycle)
             if assignee_name:
                 assign_jobs_to_one_user(jobs, headers, assignee_name)
-                log_assignment(task_name, task_id, assignee_name, len(jobs), project_name)
+                log_assignment(task_name, task_id, assignee_name, len(jobs), project_name, organization)
 
 
 if __name__ == "__main__":
@@ -374,6 +374,8 @@ if __name__ == "__main__":
     parser.add_argument("--assignees", type=str, nargs="+", required=True)
     args = parser.parse_args()
 
+    ORGANIZATION = args.org_name
+
     if args.org_name not in ORGANIZATIONS:
         raise ValueError(f"❌ 지정된 조직({args.org_name})이 .env의 조직 리스트에 없습니다: {ORGANIZATIONS}")
     
@@ -381,4 +383,4 @@ if __name__ == "__main__":
     org_id, org_slug = get_or_create_organization(args.org_name)
     headers = build_headers(org_slug)
     project_id = create_project(args.project_name, labels=args.labels, headers=headers)
-    compress_and_upload_all(image_dir, project_id, headers, assignees=args.assignees, project_name=args.project_name, batch_size=100)
+    compress_and_upload_all(image_dir, project_id, headers, assignees=args.assignees, project_name=args.project_name, organization=ORGANIZATION, batch_size=100)
