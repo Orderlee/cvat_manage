@@ -94,7 +94,7 @@ def upload_annotations(task_id, json_path, headers):
         files = {"annotation_file": (json_path.name, jf, "application/json")}
         url = f"{CVAT_URL}/api/tasks/{task_id}/annotations"
         params = {
-            "org": ORGANIZATION,
+            "org": ORGANIZATIONS,
             "format": "COCO 1.0",
             "filename": json_path.name,
             "conv_mask_to_poly": "true"
@@ -186,7 +186,7 @@ def log_assignment(task_name, task_id, assignee_name, num_jobs, project_name):
 
     log_entry_dict = {
         "timestamp": now_str,
-        "organization": ORGANIZATION,
+        "organization": ORGANIZATIONS,
         "project": project_name,
         "task_name": task_name,
         "task_id": task_id,
