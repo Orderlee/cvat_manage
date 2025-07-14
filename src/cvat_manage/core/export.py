@@ -99,7 +99,8 @@ def get_label_types_from_annotations(job_id):
     print(f"📌 Job ID {job_id} → 사용된 라벨 타입: {label_types}")
     return label_types
 
-def run_cvat_cli_export(task_id: int, task_name: str, assignee: str, result_dir: Path, export_log_path: Path, assignee_map: dict, export_format: str):
+def run_cvat_cli_export(task_id: int, task_name: str, assignee: str, result_dir: Path, export_log_path: Path, assignee_map: dict, export_format: str,
+                        log_name_override: str = None):
     safe_name = task_name.replace(" ", "-")
     exported_date = datetime.today().strftime("%Y-%m-%d")
 
@@ -128,9 +129,12 @@ def run_cvat_cli_export(task_id: int, task_name: str, assignee: str, result_dir:
 
         mapped_assignee = assignee_map.get(assignee, assignee)
 
+        # 로그에 기록할 이름을 직접 지정
+        log_name = log_name_override if log_name_override else task_name
+
         with open(export_log_path, "a", newline='') as f:
             writer = csv.writer(f)
-            writer.writerow([task_id, task_name, mapped_assignee, exported_date])
+            writer.writerow([task_id, log_name, mapped_assignee, exported_date])
 
         extract_json_and_only_json(output_path)
 
@@ -194,11 +198,14 @@ def main():
             run_cvat_cli_export(int(task_id), task_name, assignee, result_dir, export_log_path, assignee_map, CVAT_EXPORT_FORMAT)
             exported = True
         elif label_types == {"skeleton"}:
-            run_cvat_cli_export(int(task_id), task_name, assignee, result_dir, export_log_path, assignee_map, os.getenv("CVAT_EXPORT_FORMAT_4"))
+            run_cvat_cli_export(int(task_id), task_name, assignee, result_dir, export_log_path, assignee_map, os.getenv("CVAT_EXPORT_FORMAT_4"),
+                                log_name_override=task_name + "_k")
             exported = True
         elif {"rectangle", "skeleton"}.issubset(label_types):
-            run_cvat_cli_export(int(task_id), task_name, assignee, result_dir, export_log_path, assignee_map, CVAT_EXPORT_FORMAT)
-            run_cvat_cli_export(int(task_id), task_name, assignee, result_dir, export_log_path, assignee_map, os.getenv("CVAT_EXPORT_FORMAT_4"))
+            run_cvat_cli_export(int(task_id), task_name, assignee, result_dir, export_log_path, assignee_map, CVAT_EXPORT_FORMAT,
+                                log_name_override=task_name)
+            run_cvat_cli_export(int(task_id), task_name, assignee, result_dir, export_log_path, assignee_map, os.getenv("CVAT_EXPORT_FORMAT_4"),
+                                log_name_override=task_name + "_k")
 
 if __name__ == "__main__":
     main()
