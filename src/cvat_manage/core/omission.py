@@ -78,10 +78,19 @@ def get_organization_name(org_id):
     r.raise_for_status()
     return r.json().get("slug", f"(No name, ID {org_id})")
 
+# def get_job_issues(job_id):
+#     r = requests.get(f"{CVAT_URL}/api/issues?job_id={job_id}", headers=HEADERS)
+#     r.raise_for_status()
+#     return [(i["frame"], i["message"]) for i in r.json().get("results", [])]
+
 def get_job_issues(job_id):
     r = requests.get(f"{CVAT_URL}/api/issues?job_id={job_id}", headers=HEADERS)
     r.raise_for_status()
-    return [(i["frame"], i["message"]) for i in r.json().get("results", [])]
+    return [
+        (i.get("frame", -1), i.get("message", "(no message)"))
+        for i in r.json().get("results", [])
+        if "frame" in i
+    ]
 
 def get_job_labels(job_id):
     r = requests.get(f"{CVAT_URL}/api/labels?job_id={job_id}", headers=HEADERS)
