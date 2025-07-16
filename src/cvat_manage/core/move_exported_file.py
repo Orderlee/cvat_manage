@@ -102,6 +102,19 @@ def generate_meta_yaml(target_dir: Path, zip_filename: str, label_type: str, zip
         yaml.dump(meta, f, allow_unicode=True)
     print(f"[📝] meta.yaml 갱신 완료: {meta_path}")
 
+def safe_move(src, dst):
+    try:
+        if not os.path.exists(src):
+            print(f"[❌] 원본 파일이 존재하지 않습니다: {src}")
+            return False
+        shutil.copy2(src, dst)
+        os.remove(src)
+        print(f"[✅] 파일 복사 및 삭제 완료: {src} → {dst}")
+        return True
+    except Exception as e:
+        print(f"[❌] 파일 이동 실패: {src} → {dst}\n에러: {e}")
+        return False
+    
 
 def move_and_extract_zip(zip_file: Path, matched_folder: Path, moved_log_writer=None):
     if "_keypoint" in zip_file.name:
@@ -119,7 +132,11 @@ def move_and_extract_zip(zip_file: Path, matched_folder: Path, moved_log_writer=
 
     dest_path = target_dir / zip_file.name
     print(f"[🚚] 이동 경로: {dest_path}")
-    shutil.move(str(zip_file), str(dest_path))
+    # shutil.move(str(zip_file), str(dest_path))
+
+    if not safe_move(str(zip_file), str(dest_path)):
+        return
+    
 
     try:
         with zipfile.ZipFile(dest_path, 'r') as zip_ref:
@@ -157,7 +174,7 @@ def move_zip_to_corresponding_folder(result_dir: Path, dest_dir: Path):
         print("❌ 이동할 zip 파일이 없습니다.")
         return
     
-    moved_log_path = Path("./moved_log.csv")
+    moved_log_path = Path("/home/pia/work_p/dfn/omission/result/moved_log.csv")
 
     is_new_log = not moved_log_path.exists()
 
