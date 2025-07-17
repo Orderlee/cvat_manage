@@ -61,7 +61,7 @@ def run_script(script_path, args_str="", max_retries=1, timeout_sec=600):
         else:
             print(f"🚫 모든 재시도 실패. 다음 스크립트로 넘어갑니다.")
 
-def main():
+def main(quiet=False):
     # 1️⃣ omission.py 실행
     omission_path = os.getenv("OMISSION_SCRIPT")
     omission_args = os.getenv("OMISSION_ARGS", "")
