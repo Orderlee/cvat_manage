@@ -34,7 +34,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def run_script(script_path, args_str="", max_retries=1, timeout_sec=600):
+def run_script(script_path, args_str="", max_retries=1, timeout_sec=3600):
     command = [sys.executable, script_path]
     if args_str:
         command.extend(args_str.split())
