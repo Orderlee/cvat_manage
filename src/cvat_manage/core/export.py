@@ -101,7 +101,7 @@ def get_label_types_from_annotations(job_id):
 
 def run_cvat_cli_export(task_id: int, task_name: str, assignee: str, result_dir: Path, export_log_path: Path, assignee_map: dict, export_format: str,
                         log_name_override: str = None):
-    safe_name = task_name.replace(" ", "-")
+    safe_name = task_name#.replace(" ", "-")
     exported_date = datetime.today().strftime("%Y-%m-%d")
 
     # export_format 값에 따라 결정
@@ -189,7 +189,7 @@ def main():
 
         label_types = get_label_types_from_annotations(int(job["id"]))
 
-        result_dir = base_result_dir / today_str / org_slug / task_name.replace(" ", "_")
+        result_dir = base_result_dir / today_str / org_slug / task_name#.replace(" ", "_")
         result_dir.mkdir(parents=True, exist_ok=True)
 
         exported = False
