@@ -54,7 +54,12 @@ def load_frame_data(csv_files, organization=None, project=None):
                 frame_count = stop - start + 1
             except:
                 frame_count = 0
-            label_count = int(row.get("label_count", 0))
+            label_count_str = str(row.get)
+            try:
+                label_count = int(label_count_str)
+            except ValueError:
+                parts = label_count_str.split()
+                label_count = int(parts[0]) if parts and parts[0].isdigit() else 0
             records.append({
                 "user": user,
                 "date": date_label,
