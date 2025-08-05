@@ -68,6 +68,25 @@ def get_organization_name(org_id):
 def get_user_display_name(user_id):
     return os.getenv(f"USERMAP_{user_id}", user_id)
 
+def get_job_labels(job_id):
+    r = requests.get(f"{CVAT_URL}/api/labels?job_id={job_id}", headers=HEADERS)
+    r.raise_for_status()
+    return [l["name"] for l in r.json().get("results", [])]
+
+def get_job_issues(job_id):
+    r = requests.get(f"{CVAT_URL}/api/issues?job_id={job_id}", headers=HEADERS)
+    r.raise_for_status()
+    return [
+        (i.get("frame", -1), i.get("message", "(no message)"))
+        for i in r.json().get("results", [])
+        if "frame" in i
+    ]
+
+def get_annotations(job_id):
+    r = requests.get(f"{CVAT_URL}/api/jobs/{job_id}/annotations", headers=HEADERS)
+    r.raise_for_status()
+    return r.json().get("shapes", [])
+
 def main(quiet=False):
     jobs = get_all_jobs()
     task_cache, project_cache, org_cache = {}, {}, {}
@@ -109,16 +128,25 @@ def main(quiet=False):
         stage = job.get("stage")
         state = job.get("state")
 
-        # 모든 job은 할당된 것으로 간주
         org_proj_user_stats[org_name][project_name][assignee_display]["total_jobs"] += 1
-
-        # 상태 통계는 모든 job 대상으로 계산
         status_stats[org_name][project_name][f"{stage} {state}"] += 1
+
+        job_id = job["id"]
+        annotations = get_annotations(job_id)
+        label_count = len(annotations)
+        issues = get_job_issues(job_id)
+        labels = get_job_labels(job_id)
 
         if (stage == "annotation" and state == "completed") or (stage == "acceptance" and state == "completed"):
             org_proj_user_stats[org_name][project_name][assignee_display]["completed_jobs"] += 1
 
         frame_range = f"{job.get('start_frame', 0)}~{job.get('stop_frame', 0)}"
+
+        total_frames = job.get("stop_frame", 0) - job.get("start_frame", 0) + 1
+        annotated_frames = set(shape["frame"] for shape in annotations)
+        missing_frames = [f for f in range(job.get("start_frame", 0), job.get("stop_frame", 0) + 1) if f not in annotated_frames]
+        missing_count = len(missing_frames)
+        missing_rate = round(missing_count / total_frames * 100, 2) if total_frames else 0
 
         results.append({
             "organization": org_name,
@@ -127,7 +155,15 @@ def main(quiet=False):
             "task_id": task_id,
             "assignee": assignee_display,
             "created": created_date,
-            "missing_count": 0,
+            "state": state,
+            "stage": stage,
+            "labels": ", ".join(labels),
+            "label_count": label_count,
+            "issue_count": len(issues),
+            "issues": "; ".join([f"Frame {f}: {m}" for f, m in issues]),
+            "missing_count": missing_count,
+            "missing_rate": missing_rate,
+            "missing_frames": ", ".join(map(str, missing_frames)),
             "frame_range": frame_range
         })
 
@@ -137,7 +173,12 @@ def main(quiet=False):
     csv_filename = csv_dir / f"cvat_job_report_{today_str}.csv"
 
     with open(csv_filename, "w", newline="") as f:
-        fieldnames = ["organization", "project", "task", "task_id", "assignee", "created", "missing_count", "frame_range"]
+        fieldnames = [
+            "organization", "project", "task", "task_id", "assignee", "created",
+            "state", "stage", "labels", "label_count",
+            "issue_count", "issues", "missing_count", "missing_rate",
+            "missing_frames", "frame_range"
+        ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(results)
@@ -171,6 +212,4 @@ if __name__ == "__main__":
     parser.add_argument("--quiet", action="store_true", help="콘솔 출력 생략 (crontab용)")
     args = parser.parse_args()
     main(quiet=args.quiet)
-
-
 
