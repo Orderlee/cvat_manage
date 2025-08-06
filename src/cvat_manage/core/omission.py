@@ -186,26 +186,26 @@ def main(quiet=False):
     if not quiet:
         print(f"\n📄 CSV 저장 완료: {csv_filename}")
 
-        print("\n📌 Organization +  Project별 작업자 Completion Rate 요약:")
-        for org, projects in org_proj_user_stats.items():
-            print(f"\n🏢 [Organization: {org}]")
-            for proj, users in projects.items():
-                print(f"📂 [Project: {proj}]")
-                for user, stats in users.items():
-                    total = stats["total_jobs"]
-                    completed = stats["completed_jobs"]
-                    rate = round(completed / total * 100, 2) if total else 0
-                    print(f" - {user} → Job: {total}개 | Completed: {rate}% ({completed} / {total})")
+    print("\n📌 Organization +  Project별 작업자 Completion Rate 요약:")
+    for org, projects in org_proj_user_stats.items():
+        print(f"\n🏢 [Organization: {org}]")
+        for proj, users in projects.items():
+            print(f"📂 [Project: {proj}]")
+            for user, stats in users.items():
+                total = stats["total_jobs"]
+                completed = stats["completed_jobs"]
+                rate = round(completed / total * 100, 2) if total else 0
+                print(f" - {user} → Job: {total}개 | Completed: {rate}% ({completed} / {total})")
 
-        print("\n📌 Organization + Project별 Annotation Status Statistics:")
-        for org, projects in status_stats.items():
-            print(f"\n🏢 [Organization: {org}]")
-            for proj, states in projects.items():
-                total_count = sum(states.values())
-                print(f"📂 [Project: {proj}] Annotation Status Statistics: (총 {total_count}개)")
-                for state_label, count in states.items():
-                    percentage = round(count / total_count * 100, 2) if total_count else 0
-                    print(f" - {state_label}: {count}개 ({percentage}%)")
+    print("\n📌 Organization + Project별 Annotation Status Statistics:")
+    for org, projects in status_stats.items():
+        print(f"\n🏢 [Organization: {org}]")
+        for proj, states in projects.items():
+            total_count = sum(states.values())
+            print(f"📂 [Project: {proj}] Annotation Status Statistics: (총 {total_count}개)")
+            for state_label, count in states.items():
+                percentage = round(count / total_count * 100, 2) if total_count else 0
+                print(f" - {state_label}: {count}개 ({percentage}%)")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
