@@ -2,8 +2,11 @@ import argparse
 import sys
 import os
 import pandas as pd
+import matplotlib
+# GUI 백엔드 대신 'Agg' 백엔드를 사용하도록 설정 (화면을 띄우지 않고 이미지 파일로만 저장)
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import koreanize_matplotlib
+import koreanize_matplotlib  # for Korean fonts in plots
 from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
@@ -11,6 +14,9 @@ from msal import ConfidentialClientApplication
 import requests
 import json
 import base64
+import re
+import time
+import numpy as np
 
 # 환경 변수 로딩
 env_path = Path(__file__).resolve().parent.parent / ".env"
@@ -29,122 +35,229 @@ def get_recent_csv_files(n=5):
     csv_files = sorted(CSV_DIR.glob("cvat_job_report_*.csv"), reverse=True)
     return csv_files[:n]
 
-def extract_mmdd_from_filename(filename):
-    date_part = filename.stem.split("_")[-1]
-    dt = datetime.strptime(date_part, "%Y-%m-%d")
-    return dt.strftime("%m-%d")
+def read_recent_reports(csv_dir, n=5):
+    recent_files = get_recent_csv_files(n)
+    combined_df = pd.DataFrame()
+    for fpath in recent_files:
+        temp_df = pd.read_csv(fpath)
+        date_str = fpath.stem.split('_')[-1]
+        try:
+            report_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+        except ValueError:
+            continue
+        temp_df['report_date'] = report_date
+        combined_df = pd.concat([combined_df, temp_df], ignore_index=True)
+    return combined_df
 
-def load_frame_data(csv_files, organization=None, project=None):
-    records = []
-    for file in csv_files:
-        df = pd.read_csv(file)
-        date_label = extract_mmdd_from_filename(file)
+def plot_custom_state_status(df, title="Task Status Distribution by Assignee", output_name="user_selected_state_status_count.png"):
+    # 조건과 라벨 정의
+    conditions = [
+        (df["stage"] == "acceptance") & (df["state"] == "completed"),
+        (df["stage"] == "annotation") & (df["state"] == "completed"),
+        (df["stage"] == "annotation") & (df["state"] == "in progress"),
+    ]
+    labels = ["Inspection Completed", "Labeling Completed", "Labeling in Progress"]
 
-        df = df[df["state"] == "completed"]
-        if organization:
-            df = df[df["organization"] == organization]
-        if project:
-            df = df[df["project"] ==project]
-            
-        for _, row in df.iterrows():
-            user = row["assignee"]
-            frame_range = row.get("frame_range", "")
-            try:
-                start, stop = map(int, frame_range.split("~"))
-                frame_count = stop - start + 1
-            except:
-                frame_count = 0
-            label_count_str = str(row.get)
-            try:
-                label_count = int(label_count_str)
-            except ValueError:
-                parts = label_count_str.split()
-                label_count = int(parts[0]) if parts and parts[0].isdigit() else 0
-            records.append({
-                "user": user,
-                "date": date_label,
-                "frame_count": frame_count,
-                "label_count": label_count
-            })
-    return pd.DataFrame(records)
+    df = df.copy()
+    df["combined"] = ""
+    for cond, label in zip(conditions, labels):
+        df.loc[cond, "combined"] = label
 
-def plot_user_frame_by_day(df, prefix, organization, project):
-    pivot = df.groupby(["user", "date"])['frame_count'].sum().unstack(fill_value=0)
-    ax = pivot.plot(kind="bar", figsize=(12, 6), colormap="tab20", width=0.8)
+    df_filtered = df[df["combined"] != ""]
+    if df_filtered.empty:
+        print(f"  -> No data available, skipping: {output_name}")
+        return
+
+    state_counts = df_filtered.groupby(["assignee", "combined"]).size().unstack(fill_value=0)
+
+    for label in labels:
+        if label not in state_counts.columns:
+            state_counts[label] = 0
+    state_counts = state_counts[labels]
+
+    ax = state_counts.plot(kind="bar", figsize=(12, 6), colormap="Set2", width=0.8)
+    ax.set_title(title)
+    ax.set_xlabel("Assignee")
+    ax.set_ylabel("Task Count")
+
     for container in ax.containers:
-        ax.bar_label(container, padding=1, fontsize=10)
-    plt.title(f"{organization} / {project} - Number of Completed Images per Worker in the Last 5 Days")
-    plt.xlabel("Annotator")
-    plt.ylabel("Number of Images")
+        ax.bar_label(container, label_type="edge", fontsize=9)
+
     plt.xticks(rotation=45)
     plt.tight_layout()
-    today_str = datetime.today().strftime("%Y-%m-%d")
-    out_path = VIS_DIR / f"{prefix}_user_frame_assignment_by_day_{today_str}.png"
+    out_path = VIS_DIR / output_name
     plt.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close()
+    print(f"  -> Graph saved: {out_path}")
 
-def plot_daily_completed_images(df, prefix, organization, project):
-    pivot = df.groupby(["user", "date"])['frame_count'].sum().unstack(fill_value=0)
-    pivot = pivot.loc[:, sorted(pivot.columns, key=lambda x: datetime.strptime(x, "%m-%d"))]
+def plot_custom_state_status_daily_diff(df, title="Daily Task Status Change by Assignee", output_name="state_status_daily_diff.png"):
+    if 'report_date' not in df.columns:
+        print(f"  -> No 'report_date' column, skipping: {output_name}")
+        return
 
-    daily = pivot.diff(axis=1)
-    first_date = pivot.columns[0]
-    daily[first_date] = pivot[first_date]
+    conditions = [
+        (df["stage"] == "acceptance") & (df["state"] == "completed"),
+        (df["stage"] == "annotation") & (df["state"] == "completed"),
+        (df["stage"] == "annotation") & (df["state"] == "in progress"),
+    ]
+    labels = ["Inspection Completed", "Labeling Completed", "Labeling in Progress"]
 
-    display_dates = pivot.columns[-5:]
-    daily = daily[display_dates]
+    df = df.copy()
+    df["combined"] = ""
+    for cond, label in zip(conditions, labels):
+        df.loc[cond, "combined"] = label
 
-    ax = daily.plot(kind="bar", figsize=(12, 6), colormap="tab20", width=0.8)
+    df_filtered = df[df["combined"] != ""]
+    unique_dates = sorted(df_filtered['report_date'].unique())
+    if len(unique_dates) < 2:
+        print(f"  -> Need at least 2 dates, skipping: {output_name}")
+        return
+
+    latest_date = unique_dates[-1]
+    prev_date = unique_dates[-2]
+
+    latest_counts = df_filtered[df_filtered['report_date'] == latest_date].groupby(['assignee', 'combined']).size().unstack(fill_value=0)
+    prev_counts = df_filtered[df_filtered['report_date'] == prev_date].groupby(['assignee', 'combined']).size().unstack(fill_value=0)
+
+    for label in labels:
+        if label not in latest_counts.columns:
+            latest_counts[label] = 0
+        if label not in prev_counts.columns:
+            prev_counts[label] = 0
+    latest_counts = latest_counts[labels]
+    prev_counts = prev_counts[labels]
+
+    diff_counts = latest_counts.subtract(prev_counts, fill_value=0)
+    diff_counts[diff_counts < 0] = 0
+
+    if diff_counts.sum().sum() == 0:
+        print(f"  -> No daily change, skipping: {output_name}")
+        return
+
+    ax = diff_counts.plot(kind="bar", figsize=(12, 6), colormap="Set2", width=0.8)
+    ax.set_title(title)
+    ax.set_xlabel("Assignee")
+    ax.set_ylabel("Daily Change in Task Count")
+
     for container in ax.containers:
-        ax.bar_label(container, padding=1, fontsize=10)
-    plt.title(f"{organization} / {project} - Daily Number of Completed Images per Worker")
-    plt.xlabel("Annotator")
-    plt.ylabel("Daily Number of Completed Images")
+        ax.bar_label(container, label_type="edge", fontsize=9)
+
     plt.xticks(rotation=45)
     plt.tight_layout()
-    today_str = datetime.today().strftime("%Y-%m-%d")
-    out_path = VIS_DIR / f"{prefix}_user_daily_frame_assignment_{today_str}.png"
-    plt.savefig(out_path, dpi=300, bbox_inches='tight')
-    plt.close()
-
-def plot_user_labelcount_by_day(df, prefix, organization, project):
-    pivot = df.groupby(["user", "date"])["label_count"].sum().unstack(fill_value=0)
-    ax = pivot.plot(kind="bar", figsize=(12, 6), colormap="tab20", width=0.8)
-    for container in ax.containers:
-        ax.bar_label(container, padding=1, fontsize=10)
-    plt.title(f"{organization} / {project} - Number of Labeled Objects per Worker in the Last 5 Days")
-    plt.xlabel("Annotator")
-    plt.ylabel("Labeled Objects")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    today_str = datetime.today().strftime("%Y-%m-%d")
-    out_path = VIS_DIR / f"{prefix}_user_labelcount_by_day_{today_str}.png"
+    # date_label = f"{prev_date} → {latest_date}"
+    ax.legend(title=f"Period: {prev_date}")
+    out_path = VIS_DIR / output_name
     plt.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close()
+    print(f"  -> Daily change graph saved: {out_path}")
 
-def plot_daily_labeled_objects(df, prefix, organization, project):
-    pivot = df.groupby(["user", "date"])["label_count"].sum().unstack(fill_value=0)
-    pivot = pivot.loc[:, sorted(pivot.columns, key=lambda x: datetime.strptime(x, "%m-%d"))]
+def plot_project_counts_by_organization(df, output_name_prefix="project_counts"):
+    """
+    organization별로 데이터를 나누어 각 조직에 속한 프로젝트들의 작업 개수를 시각화하고,
+    파일을 조직별로 개별 저장합니다.
+    """
+    df = df.copy()
 
-    daily = pivot.diff(axis=1)
-    first_date = pivot.columns[0]
-    daily[first_date] = pivot[first_date]
+    # 최신 날짜로 필터링
+    if 'report_date' in df.columns:
+        latest_date = df['report_date'].max()
+        df = df[df['report_date'] == latest_date]
 
-    display_dates = pivot.columns[-5:]
-    daily = daily[display_dates]
+    orgs = df['organization'].unique()
+    for org in orgs:
+        org_df = df[df['organization'] == org]
+        if org_df.empty:
+            continue
 
-    ax = daily.plot(kind="bar", figsize=(12, 6), colormap="tab20", width=0.8)
-    for container in ax.containers:
-        ax.bar_label(container, padding=1, fontsize=10)
-    plt.title(f"{organization} / {project} - Daily Number of Labeled Objects per Worker")
-    plt.xlabel("Annotator")
-    plt.ylabel("Daily Labeled Objects")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    today_str = datetime.today().strftime("%Y-%m-%d")
-    out_path = VIS_DIR / f"{prefix}_user_daily_labelcount_{today_str}.png"
-    plt.savefig(out_path, dpi=300, bbox_inches="tight")
-    plt.close()
+        counts = org_df['project'].value_counts()
+
+        # 컬러맵에서 막대 개수에 맞춰 색상 배열 생성
+        cmap = plt.get_cmap('Set3')
+        colors = cmap(np.linspace(0, 1, len(counts)))
+
+        plt.figure(figsize=(8,5))
+        ax = counts.plot(kind="bar", color=colors)
+        plt.title(f"{org} - Job Count by Project")
+        plt.xlabel("Project")
+        plt.ylabel("Job Count")
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
+
+        for container in ax.containers:
+            ax.bar_label(container, label_type="edge", fontsize=9)
+
+        today_str = datetime.today().strftime("%Y-%m-%d")
+        org_name_safe = re.sub(r'[^\w\s-]', '_', str(org))
+        out_path = VIS_DIR / f"{today_str}_{org_name_safe}_{output_name_prefix}.png"
+        plt.savefig(out_path, dpi=300)
+        plt.close()
+        print(f"그래프 저장 완료: {out_path}")
+
+def plot_estimated_daily_jobs_by_org(df, output_name_prefix="est_daily_jobs"):
+    """
+    조직별로 연속된 두 날짜의 작업 수 차이를 계산하여 (다음날 - 이전날),
+    음수 값은 0으로 처리한 후 선 그래프를 저장합니다.
+    조건: acceptance-completed, annotation-completed.
+    """
+    # report_date 컬럼 존재 여부 확인
+    if 'report_date' not in df.columns:
+        print("  -> 'report_date' column is missing; cannot plot.")
+        return
+
+    # 두 가지 조건에 따른 필터링
+    mask = (
+        ((df["stage"] == "acceptance") & (df["state"] == "completed")) |
+        ((df["stage"] == "annotation") & (df["state"] == "completed"))
+    )
+    df_filtered = df[mask].copy()
+
+    # 조직 목록 반복
+    organizations = df_filtered['organization'].unique()
+    for org in organizations:
+        org_df = df_filtered[df_filtered['organization'] == org]
+        if org_df.empty:
+            print(f"  -> No data for organization '{org}', skipping.")
+            continue
+
+        # 날짜별 작업 수 집계 후 오름차순 정렬
+        daily_counts = org_df.groupby('report_date').size().sort_index()
+
+        if len(daily_counts) < 2:
+            print(f"  -> Not enough dates for '{org}', skipping.")
+            continue
+
+        # 연속된 두 날짜의 차이 계산 (다음날 - 이전날), 음수는 0으로 처리
+        dates_for_plot = []
+        jobs_done_estimates = []
+        counts_values = daily_counts.values
+        dates = daily_counts.index
+        for i in range(len(counts_values) - 1):
+            jobs_done = counts_values[i+1] - counts_values[i]
+            jobs_done_estimates.append(max(0, jobs_done))
+            dates_for_plot.append(dates[i])  # 이전 날짜를 레이블로 사용
+
+        # 선 그래프 그리기
+        plt.figure(figsize=(8, 5))
+        plt.plot(dates_for_plot, jobs_done_estimates, marker='o', color='#66c2a5')
+        plt.title(f"{org} - Estimated Jobs Done per Day")
+        plt.xlabel("Date")
+        plt.ylabel("Estimated Jobs Done")
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+
+        # 각 점 위에 값 표시
+        for x, y in zip(dates_for_plot, jobs_done_estimates):
+            plt.text(x, y, f"{int(y)}", ha='center', va='bottom', fontsize=9)
+
+        # 그래프 저장
+        today_str = datetime.today().strftime("%Y-%m-%d")
+        org_safe = re.sub(r'[^\w\s-]', '_', str(org))
+        out_path = VIS_DIR / f"{today_str}_{org_safe}_{output_name_prefix}.png"
+        plt.savefig(out_path, dpi=300)
+        plt.close()
+        print(f"  -> Estimated daily jobs graph saved for {org}: {out_path}")
+
+
 
 def get_access_token():
     tenant_id = os.getenv("TENANT_ID")
@@ -165,37 +278,80 @@ def get_access_token():
     else:
         raise Exception(f"❌ 토큰 발급 실패: {token_response.get('error_description')}")
 
-def send_email_via_graph(targets, subject, body):
+def send_email_via_graph(targets, subject, body, override_receiver=None, specific_org=None):
+    """
+    첨부파일 경로 구성 및 이메일 전송.
+    override_receiver가 있으면 EMAIL_RECEIVER 대신 해당 이메일로만 보내고,
+    specific_org가 있으면 그 조직에 대한 첨부파일만 포함합니다.
+    """
     EMAIL_SENDER = os.getenv("EMAIL_SENDER")
     EMAIL_RECEIVER = os.getenv("EMAIL_RECEIVER")
     EMAIL_CC = os.getenv("EMAIL_CC")
-    if not (EMAIL_SENDER and EMAIL_RECEIVER):
-        print("📭 이메일 정보가 누락되어 전송하지 않습니다.")
+
+    if not EMAIL_SENDER:
+        print("📭 EMAIL_SENDER가 설정되지 않아 메일을 전송하지 않습니다.")
         return
 
-    to_list = [addr.strip() for addr in EMAIL_RECEIVER.split(",")]
-    cc_list = [addr.strip() for addr in EMAIL_CC.split(",")] if EMAIL_CC else []
+    # 수신자 설정
+    if override_receiver:
+            if isinstance(override_receiver, list):
+                to_list = override_receiver
+            else:
+                to_list = [override_receiver]
+            cc_list = []
+    else:
+        if not EMAIL_RECEIVER:
+            print("📭 EMAIL_RECEIVER가 설정되지 않아 메일을 전송하지 않습니다.")
+            return
+        to_list = [addr.strip() for addr in EMAIL_RECEIVER.split(",")]
+        cc_list = [addr.strip() for addr in EMAIL_CC.split(",")] if EMAIL_CC else []
 
     access_token = get_access_token()
     today_str = datetime.today().strftime("%Y-%m-%d")
     base_path = Path(VIS_DIR)
 
-    image_files = []
-    for org, proj in targets:
-        prefix = f"{org}_{proj}"
-        image_files += [
-            base_path / f"{prefix}_user_daily_frame_assignment_{today_str}.png",
-            base_path / f"{prefix}_user_frame_assignment_by_day_{today_str}.png",
-            base_path / f"{prefix}_user_labelcount_by_day_{today_str}.png",
-            base_path / f"{prefix}_user_daily_labelcount_{today_str}.png"
-        ] 
+    attachment_paths = set()
+    seen_orgs = set()
 
+
+    # image_files = []
+    for org, proj in targets:
+        # 조직과 프로젝트 이름을 안전한 파일명으로 변환
+        org_safe = re.sub(r'[^\w\s-]', '_', str(org))
+        proj_safe = re.sub(r'[^\w\s-]', '_', str(proj))
+
+        # specific_org 옵션이 있으면 해당 조직만 처리
+        if specific_org and org_safe != specific_org:
+            continue
+
+        # --- 조직 단위로 저장된 그래프 추가 ---
+        # 예: 2025-08-05_vietnamlabeling_state_status_recent5.png
+        if org_safe not in seen_orgs:
+            prefix_org = f"{today_str}_{org_safe}"
+            attachment_paths.update([
+                base_path / f"{prefix_org}_state_status_recent5.png",
+                base_path / f"{prefix_org}_state_status_daily_diff.png",
+                base_path / f"{prefix_org}_project_counts_recent.png",
+                base_path / f"{prefix_org}_est_daily_jobs.png"
+            ])
+            seen_orgs.add(org_safe)
+
+        # --- 조직+프로젝트 단위로 저장된 그래프 추가 ---
+        # 예: 2025-08-05_vietnamlabeling_projectA_state_status_recent5.png
+        prefix_proj = f"{today_str}_{org_safe}_{proj_safe}"
+        attachment_paths.update([
+            base_path / f"{prefix_proj}_state_status_recent5.png",
+            base_path / f"{prefix_proj}_state_status_daily_diff.png",
+        ])
+
+    # 실제 존재하는 파일만 첨부
     attachments = []
-    for file_path in image_files:
+    for file_path in attachment_paths:
         if file_path.exists():
             with open(file_path, "rb") as f:
                 content_bytes = f.read()
             content_b64 = base64.b64encode(content_bytes).decode()
+
             attachments.append({
                 "@odata.type": "#microsoft.graph.fileAttachment",
                 "name": file_path.name,
@@ -204,6 +360,10 @@ def send_email_via_graph(targets, subject, body):
             })
         else:
             print(f"⚠️ 첨부 이미지 누락: {file_path}")
+
+    if not attachments:
+        print("📭 첨부할 파일이 없어 메일을 전송하지 않습니다.")
+        return
 
     message = {
         "message": {
@@ -230,7 +390,9 @@ def send_email_via_graph(targets, subject, body):
     else:
         print(f"❌ Graph API 이메일 전송 실패: {response.status_code}, {response.text}")
 
-def parse_targets_from_env():
+
+
+def parse_targets_from_env(n: int = 5) -> list[tuple[str, str]]:
     organizations = os.getenv("ORGANIZATIONS", "").split(",")
     targets = []
     for csv_file in get_recent_csv_files(N):
@@ -243,27 +405,87 @@ def parse_targets_from_env():
 
 
 if __name__ == "__main__":
+    # Number of recent CSVs to process
     N = 5
-    recent_files = get_recent_csv_files(N)
+    args = parse_args()
+    if args.targets:
+        targets = []
+        for t in args.targets:
+            if ":" in t:
+                org, proj = t.split(":", 1)
+                targets.append((org.strip(), proj.strip()))
+            else:
+                print(f"⚠️ Ignoring malformed target '{t}'. Expected format org:project.")
+    else:
+        targets = parse_targets_from_env(n=N)
 
-    targets = parse_targets_from_env()
+    recent_df = read_recent_reports(CSV_DIR, n=N)
+    recent_df2 = read_recent_reports(CSV_DIR, n=10)
 
-    for org, proj in targets:
-        prefix = f"{org}_{proj}"
-        df_filtered = load_frame_data(recent_files, organization=org, project=proj)
+    today_str = datetime.today().strftime("%Y-%m-%d")
 
-        if df_filtered.empty:
-            print(f"⚠️ 데이터 없음: {prefix}")
-            continue
+    # 1. Organization-level visualizations
+    orgs = recent_df['organization'].unique()
+    for org in orgs:
+        org_df = recent_df[recent_df['organization'] == org].copy()
+        org_name_safe = re.sub('[^\\w\\s-]', '_', str(org))
+        print(f"\n[{org}] Generating visualizations:")
+        plot_custom_state_status(
+            org_df,
+            title=f"{org} - Task Status Distribution by Assignee (Last 5 Days)",
+            output_name=f"{today_str}_{org_name_safe}_state_status_recent5.png",
+        )
+        plot_custom_state_status_daily_diff(
+            org_df,
+            title=f"{org} - Daily Task Status Change by Assignee (Most Recent Day)",
+            output_name=f"{today_str}_{org_name_safe}_state_status_daily_diff.png",
+        )
+    
+    plot_estimated_daily_jobs_by_org(recent_df2, output_name_prefix="est_daily_jobs")
 
-        print(f"✅ 시각화 생성: {prefix}")
-        plot_user_frame_by_day(df_filtered, prefix, org, proj)
-        plot_daily_completed_images(df_filtered, prefix, org, proj)
-        plot_user_labelcount_by_day(df_filtered, prefix, org, proj)
-        plot_daily_labeled_objects(df_filtered, prefix, org, proj)
-        
+    # 2. Project-level visualizations
+    projects = recent_df['project'].unique()
+    for proj in projects:
+        proj_df = recent_df[recent_df['project'] == proj].copy()
+        proj_name_safe = re.sub('[^\\w\\s-]', '_', str(proj))
+        org_names = proj_df['organization'].unique()
+        org_name = org_names[0] if len(org_names) > 0 else "unknown_org"
+        org_name_safe = re.sub('[^\\w\\s-]', '_', str(org_name))
+
+        print(f"\n[{proj} / {org_name}] Generating project-level visualizations:")
+        plot_custom_state_status(
+            proj_df,
+            title=f"{org} - {proj} - Task Status Distribution by Assignee (Last 5 Days)",
+            output_name=f"{today_str}_{org_name_safe}_{proj_name_safe}_state_status_recent5.png",
+        )
+        plot_custom_state_status_daily_diff(
+            proj_df,
+            title=f"{org} - {proj} - Daily Task Status Change by Assignee (Most Recent Day)",
+            output_name=f"{today_str}_{org_name_safe}_{proj_name_safe}_state_status_daily_diff.png",
+        )
+
+    # 3. Project count charts per organization
+    print("\nGenerating project count charts per organization:")
+    plot_project_counts_by_organization(recent_df, output_name_prefix="project_counts_recent")
+    print("\n")
+
+
     summary_text = "👥 Annotator Report Summary:\n\n"
     summary_text += "This is a report summarizing the annotation work performed by annotators.\n"
 
     print(summary_text, '\n')
-    send_email_via_graph(targets, "Daily CVAT Report by Annotator", summary_text)
+    # send_email_via_graph(targets, "Daily CVAT Report by Annotator", summary_text)
+    if targets:
+        send_email_via_graph(targets, subject="Daily CVAT Report by Annotator",
+                            body=summary_text)
+    
+    time.sleep(2)
+        
+    vietnam_targets = [t for t in targets if re.sub(r'[^\w\s-]', '_', t[0]) == "vietnamlabeling"]
+    if vietnam_targets:
+        send_email_via_graph(vietnam_targets,
+                            subject="Daily CVAT Report for Vietnam Labeling",
+                            body=summary_text,
+                            override_receiver=["xuanht@nobisoft.com.vn", "hayun@nobisoft.kr"],
+                            # override_receiver="amy@nobisoft.com.vn",
+                            specific_org="vietnamlabeling")
