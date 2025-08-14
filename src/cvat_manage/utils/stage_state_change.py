@@ -12,8 +12,8 @@ load_dotenv(dotenv_path=env_path)
 
 CVAT_URL = os.getenv("CVAT_URL_2")
 TOKEN = os.getenv("TOKEN_2")
-ORG_SLUG = "vietnamlabeling"
-PROJECT_NAME = "helmet"
+ORG_SLUG = 
+PROJECT_NAME = 
 
 FILTER_STAGE = "acceptance"
 FILTER_STATE = None

@@ -21,11 +21,11 @@ from dotenv import load_dotenv, find_dotenv
 
 # ===================== 사용자 설정 =====================
 # 원본 조직(SRC_ORG)에서 프로젝트를 백업 → 대상 조직(DST_ORG)에 복원합니다.
-SRC_ORG = "thailabeling"
-DST_ORG = "vietnamlabeling"
+SRC_ORG = 
+DST_ORG = 
 
 # 이동(백업)할 프로젝트 이름들 (정확한 "프로젝트 이름"과 일치해야 합니다)
-PROJECTS_TO_MOVE: List[str] = ["ad_lib_violence"]
+PROJECTS_TO_MOVE: List[str] = []
 
 # 백업 ZIP 보관 폴더
 BACKUP_DIR = Path.cwd() / "cvat_backups"

@@ -12,9 +12,9 @@ import requests
 from dotenv import load_dotenv
 
 # ===================== 사용자 설정 =====================
-ORG = "vietnamlabeling"       # 조회할 조직
-PROJECT_NAME = "ad_lib_weapon"    # 조회할 프로젝트 이름
-OUTPUT_CSV = "completed_job_names_weapon.csv"  # 저장 파일명
+ORG =        # 조회할 조직
+PROJECT_NAME =     # 조회할 프로젝트 이름
+OUTPUT_CSV =   # 저장 파일명
 REQUEST_TIMEOUT = 30
 # ======================================================
 

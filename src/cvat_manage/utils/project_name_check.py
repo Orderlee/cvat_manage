@@ -19,10 +19,10 @@ import requests
 from dotenv import load_dotenv
 
 # ===================== 사용자 설정 =====================
-ORG = "thailabeling"  # CSV의 org (보통 소스 org)
-PROJECT_NAME = "ad_lib"
-EXCLUSION_CSV = "cvat_task_job_assignees_adlib.csv"  # (project_name, task_id, job_id)
-OUTPUT_CSV = "job_names_output.csv"  # 저장할 파일 이름
+ORG =   # CSV의 org (보통 소스 org)
+PROJECT_NAME = 
+EXCLUSION_CSV =   # (project_name, task_id, job_id)
+OUTPUT_CSV =   # 저장할 파일 이름
 REQUEST_TIMEOUT = 30
 # ======================================================
 

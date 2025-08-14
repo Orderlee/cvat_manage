@@ -54,9 +54,9 @@ def assign_jobs_from_csv(csv_path, username, org_slug, dry_run=True):
                 assign_job_to_user(job_id, user_id, headers, dry_run=dry_run)
 
 if __name__ == "__main__":
-    csv_file = "assigned_jobs_user01.csv"
-    username = "user08"
-    org_slug = "vietnamlabeling"
+    csv_file = 
+    username = 
+    org_slug = 
 
     # 🔧 dry_run=True → 실제 할당은 하지 않고 출력만
     assign_jobs_from_csv(csv_file, username, org_slug, dry_run=False)
