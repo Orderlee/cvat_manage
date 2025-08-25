@@ -66,9 +66,9 @@ def save_jobs_to_csv(jobs_data, output_path):
     print(f"📁 CSV 저장 완료: {output_path}")
 
 if __name__== "__main__":
-    username = 
-    org_slug = 
-    output_csv = 
+    username = " "
+    org_slug = " "
+    output_csv = " "
 
     headers = build_headers(org_slug)
     jobs = get_jobs_assigned_to_user(username, org_slug, headers)
