@@ -12,12 +12,15 @@ load_dotenv(dotenv_path=env_path)
 
 CVAT_URL = os.getenv("CVAT_URL_2")
 TOKEN = os.getenv("TOKEN_2")
-ORG_SLUG = 
-PROJECT_NAME = 
+ORG_SLUG = ""
+PROJECT_NAME = ""
 
 FILTER_STAGE = "acceptance"
 FILTER_STATE = None
-NEW_STATE = "rejected"
+
+# 변경할 값
+NEW_STAGE = "annotation"   # <-- 요청사항 반영
+NEW_STATE = "new"          # <-- 요청사항 반영
 
 # dry_run
 DRY_RUN = False 
@@ -74,7 +77,7 @@ def iter_jobs_in_project(
                 continue
             if stage and job.get("stage") != stage:
                 continue
-            if state and job.get("state") != stage:
+            if state and job.get("state") != state:  # <- 버그 수정 (state 비교)
                 continue
             yield job
 
@@ -82,16 +85,16 @@ def iter_jobs_in_project(
             break
         page += 1
 
-def patch_job_state(base_url: str, job_id: int, stage: str, new_state: str) -> Dict:
-    url =f"{base_url.rstrip('/')}/api/jobs/{job_id}"
-    payload = {"stage": stage, "state": new_state}
+def patch_job_state(base_url: str, job_id: int, new_stage: str, new_state: str) -> Dict:
+    url = f"{base_url.rstrip('/')}/api/jobs/{job_id}"
+    payload = {"stage": new_stage, "state": new_state}
     if DRY_RUN:
         print(f"[DRY_RUN] PATCH {url} payload={payload}")
         return {}
     return patch_json(url, payload)
 
 def main():
-    print(f"Target: org='{ORG_SLUG}', project='{PROJECT_NAME}', filter=({FILTER_STAGE=}, {FILTER_STATE=}) -> {NEW_STATE=}")
+    print(f"Target: org='{ORG_SLUG}', project='{PROJECT_NAME}', filter=({FILTER_STAGE=}, {FILTER_STATE=}) -> ({NEW_STAGE=}, {NEW_STATE=})")
     proj_id = get_project_id(CVAT_URL, PROJECT_NAME)
     print(f"Project ID: {proj_id}")
 
@@ -104,9 +107,9 @@ def main():
     changed = 0
     for job in targets:
         jid = job["id"]
-        print(f"- Job #{jid}: stage={job['stage']} state={job['state']} -> state={NEW_STATE}")
+        print(f"- Job #{jid}: stage={job['stage']} state={job['state']} -> stage={NEW_STAGE}, state={NEW_STATE}")
         try:
-            patch_job_state(CVAT_URL, jid, FILTER_STAGE, NEW_STATE)
+            patch_job_state(CVAT_URL, jid, NEW_STAGE, NEW_STATE)
             changed += 1
             time.sleep(0.1)
         except Exception as e:
