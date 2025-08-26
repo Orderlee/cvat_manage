@@ -8,7 +8,7 @@
 - .env 불사용
 - 신규 폴더가 속한 organized_videos/<category> 를 입력 기준으로 처리
 - 결과는 같은 상위 레벨의 processed_data/<category> 아래에 생성 (없으면 생성)
-- 감지 대상: /home/pia/mou/nas_192tb/datasets/{projects,public} 하위 전체
+- 감지 대상: dataset/{projects,public} 하위 전체
 """
 
 import os
@@ -19,7 +19,7 @@ from datetime import datetime
 from typing import List, Set, Tuple, Optional
 
 # ========= 기본 설정 =========
-BASE_DIR = Path("/home/pia/mou/nas_192tb/datasets")
+BASE_DIR = Path("dataset")
 TARGET_FOLDERS = ["projects", "public"]
 SNAPSHOT_CSV = Path("dir_snapshot.csv")
 IGNORE_HIDDEN = True
@@ -28,8 +28,8 @@ VIDEO_EXTS = (".mp4", ".avi", ".mov")
 IMAGE_EXTS = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
 
 # ======== 스크립트 경로 (환경에 맞게 필요 시 조정) ========
-IMAGE_EXTRACT_2_PY = Path("/home/pia/work_p/dfn/omission/image_extract_2.py")
-IMPORT_AUTOLABELING_2_PY = Path("/home/pia/work_p/dfn/omission/import_autolabeling_2.py")
+IMAGE_EXTRACT_2_PY = Path("trigger/image_extract_2.py")
+IMPORT_AUTOLABELING_2_PY = Path("trigger/import_autolabeling_2.py")
 
 # ======== import_autolabeling.py 관련 필수 ENV(없으면 해당 단계는 경고 후 건너뜀) ========
 REQUIRE_AUTOLABEL_ENV = ["ORGANIZATIONS", "PROJECT_NAME", "LABELS", "ASSIGNEES"]
@@ -173,8 +173,8 @@ def run_import_autolabeling(image_dir: Path, target_category: str) -> None:
         return
     
     # === 고정 값 세팅 ===
-    org_name = "vietnamlabeling"
-    project_name = f"vietnam_{target_category}"
+    org_name = "labeling"
+    project_name = f"labeling_{target_category}"
     labels = ["person", f"{target_category}_person"]
     assignees = ["user08", "user02", "user03", "user04", "user05", "user06"]
 
