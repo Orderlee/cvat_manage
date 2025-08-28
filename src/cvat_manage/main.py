@@ -47,7 +47,7 @@ def run_script(script_path, args_str="", max_retries=1, timeout_sec=3600):
     for attempt in range(1, max_retries + 2):
         try:
             print(f"🚀 '{script_path}' 실행 시도 {attempt}/{max_retries + 1}")
-            result = subprocess.run(command, check=True, capture_output=True, text=True, env=env, timeout=timeout_sec)
+            result = subprocess.run(command, check=True, capture_output=True, text=True, env=env, timeout=timeout_sec, encoding="utf-8", errors="replace")
             print(result.stdout)
             return
         except subprocess.TimeoutExpired:
@@ -81,7 +81,7 @@ def main(quiet=False):
 
     # 4️⃣ move_exported_file.py 실행
     move_path = os.getenv("MOVE_SCRIPT")
-    print("📦 move_exported_file.py 실행 중...")
+    print("📦 move_exported_filenewversion.py 실행 중...")
     run_script(move_path)
 
 
