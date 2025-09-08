@@ -7,9 +7,9 @@ from typing import Optional, List, Tuple
 
 
 # ===================== 사용자 설정 =====================
-ORG =          # 어떤 ORG에서 지울지
-PROJECT_NAME =      # 어떤 프로젝트의 job만 대상으로 할지
-CSV_PATH = 
+ORG = ""       # 어떤 ORG에서 지울지
+PROJECT_NAME = ""     # 어떤 프로젝트의 job만 대상으로 할지
+CSV_PATH = ""
 REQUEST_TIMEOUT = 30
 
 DRY_RUN = False
