@@ -2,17 +2,20 @@ import os
 
 def find_bboxes_in_category(project_name: str, category_name: str):
     """
-    /home/pia/mou/nas_192tb/datasets/projects/{project_name}/processed_data/{category_name}
+    datasets/projects/{project_name}/processed_data/{category_name}
     경로 아래 모든 하위폴더를 탐색하여
     'bboxes' 폴더를 찾습니다.
     """
-    root_dir = f"/home/pia/mou/nas_192tb/datasets/projects/{project_name}/processed_data/{category_name}"
+    root_dir = ""
 
     bboxes_paths = []
 
     for dirpath, dirnames, _ in os.walk(root_dir):
         if "bboxes" in dirnames:
-            bboxes_paths.append(os.path.join(dirpath, "bboxes"))
+            full_path = os.path.join(dirpath, "bboxes")
+            rel_path = os.path.relpath(full_path, "")
+            # bboxes_paths.append(os.path.join(dirpath, "bboxes"))
+            bboxes_paths.append(rel_path)
 
     return bboxes_paths
 
@@ -21,15 +24,15 @@ if __name__ == "__main__":
     # 👉 프로젝트 이름과 카테고리 목록 지정
     project_name = "vietnam_data"
     categories = [
-        "motorcycle_helmet_failure",
-        "violence",
-        "smoking"
+        "bat_as_weapon",
+        "gun_as_weapon",
+        "knife_as_weapon",
     ]
 
     total_count = 0  # 전체 합계
 
     # 결과 저장 파일 경로
-    output_file = "bboxes_list.txt"
+    output_file = "vietnam_weapon_bboxes_list.txt"
 
     with open(output_file, "w", encoding="utf-8") as f:
         for category_name in categories:
