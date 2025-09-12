@@ -232,13 +232,38 @@ def get_jobs(task_id, headers, org_slug):
     res.raise_for_status()
     return res.json().get("results", [])
 
-def get_user_id(username, headers, org_slug):
-    res = requests.get(f"{CVAT_URL}/api/users?org={org_slug}", headers=headers)
-    res.raise_for_status()
-    for user in res.json().get("results", []):
-        if user["username"] == username:
-            return user["id"]
+# def get_user_id(username, headers, org_slug):
+#     res = requests.get(f"{CVAT_URL}/api/users?org={org_slug}", headers=headers)
+#     res.raise_for_status()
+#     for user in res.json().get("results", []):
+#         if user["username"] == username:
+#             return user["id"]
+#     return None
+
+def get_user_id(username: str, headers: dict, org_slug: str, page_size: int = 100):
+    """
+    특정 username 에 해당하는 user.id 반환
+    - 조직 내 모든 페이지를 순회하며 검색
+    - 없으면 None 반환
+    """
+    url = f"{CVAT_URL}/api/users?org={org_slug}&page_size={page_size}"
+
+    while url:
+        res = requests.get(url, headers=headers)
+        res.raise_for_status()
+        data = res.json()
+
+        # 현재 페이지에서 username 매칭 검사
+        for user in data.get("results", []) or []:
+            if user.get("username") == username:
+                return user.get("id")
+
+        # 다음 페이지로 이동
+        url = data.get("next")
+
+    # 끝까지 못 찾으면 None
     return None
+
 
 def assign_jobs_to_one_user(jobs, headers, assignee_name, org_slug):
     user_id = get_user_id(assignee_name, headers, org_slug)
