@@ -236,6 +236,7 @@ def main(quiet=False):
     for org, projects in org_proj_user_stats.items():
         print(f"\n🏢 [Organization: {org}]")
         for proj, users in projects.items():
+            print("\n")
             print(f"📂 [Project: {proj}]")
             for user, stats in users.items():
                 total = stats["total_jobs"]
@@ -248,6 +249,7 @@ def main(quiet=False):
         print(f"\n🏢 [Organization: {org}]")
         for proj, states in projects.items():
             total_count = sum(states.values())
+            print("\n")
             print(f"📂 [Project: {proj}] Annotation Status Statistics: (총 {total_count}개)")
             for state_label, count in states.items():
                 percentage = round(count / total_count * 100, 2) if total_count else 0
