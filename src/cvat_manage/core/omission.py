@@ -716,7 +716,7 @@ def get_json(path: str, org_slug: str,
     headers = build_headers(org_slug)
     resp = SESSION.get(url, headers=headers,
                        params=with_org_params(params, org_slug),
-                       timeout=20)
+                       timeout=60)
     resp.raise_for_status()
     return resp.json()
 
@@ -729,7 +729,7 @@ def api_jobs(org_slug: str) -> List[Dict[str, Any]]:
     page = 1
     while True:
         data = get_json("/api/jobs", org_slug,
-                        params={"page": page, "page_size": 100})
+                        params={"page": page, "page_size": 50})
         jobs.extend(data.get("results", []))
         if not data.get("next"):
             break
@@ -908,3 +908,4 @@ if __name__ == "__main__":
     parser.add_argument("--quiet", action="store_true", help="콘솔 출력 생략 (crontab용)")
     args = parser.parse_args()
     main(quiet=args.quiet)
+
