@@ -654,6 +654,7 @@ omission.py — 보고서 생성 속도 + 네트워크 트래픽 최적화 버�
 - 캐시(task, project, org) 적용
 - missing_frames 전체 제거 → count, rate만 저장
 - 조직 접근은 org(slug)만 사용 (org_id 제거, 404 방지)
+- assignee 출력 시 get_user_display_name() 적용
 """
 
 import os
@@ -762,9 +763,13 @@ def api_annotations(job_id: int, org_slug: str) -> Dict[str, Any]:
     return get_json(f"/api/jobs/{job_id}/annotations", org_slug)
 
 # ============================
-# 3) 캐시
+# 3) 캐시 + 유저 표시명
 # ============================
 task_cache, project_cache, org_cache = {}, {}, {}
+
+def get_user_display_name(user_id: str) -> str:
+    """USERMAP_ 접두어 환경변수에서 사용자 이름 매핑"""
+    return os.getenv(f"USERMAP_{user_id}", user_id)
 
 # ============================
 # 4) Job 상세 처리
@@ -788,8 +793,11 @@ def fetch_job_details(job, org_slug):
         org_cache[org_id_field] = api_org_slug_from_id(org_id_field, org_slug)
 
     task_name, project_name, org_name = task_cache[task_id], project_cache[project_id], org_cache[org_id_field]
+
+    # assignee 표시명 변환
     assignee = job.get("assignee")
-    assignee_display = assignee.get("username") if assignee else "(Unassigned)"
+    assignee_username = assignee.get("username") if assignee else "(Unassigned)"
+    assignee_display = get_user_display_name(assignee_username)
 
     stage, state = job.get("stage"), job.get("state")
 
@@ -908,4 +916,5 @@ if __name__ == "__main__":
     parser.add_argument("--quiet", action="store_true", help="콘솔 출력 생략 (crontab용)")
     args = parser.parse_args()
     main(quiet=args.quiet)
+
 
