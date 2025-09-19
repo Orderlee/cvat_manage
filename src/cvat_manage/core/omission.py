@@ -899,6 +899,7 @@ def main(quiet: bool = False):
                 total, completed = stats["total_jobs"], stats["completed_jobs"]
                 rate = round(completed / total * 100, 2) if total else 0
                 print(f" - {user} → Job: {total}개 | Completed: {rate}% ({completed}/{total})")
+                print("\n")
 
     print("\n📌 Organization + Project별 Annotation Status Statistics:")
     for org, projects in status_stats.items():
@@ -909,6 +910,7 @@ def main(quiet: bool = False):
             for state_label, count in states.items():
                 percentage = round(count / total_count * 100, 2) if total_count else 0
                 print(f" - {state_label}: {count}개 ({percentage}%)")
+                print("\n")
 
 
 if __name__ == "__main__":
@@ -916,5 +918,4 @@ if __name__ == "__main__":
     parser.add_argument("--quiet", action="store_true", help="콘솔 출력 생략 (crontab용)")
     args = parser.parse_args()
     main(quiet=args.quiet)
-
 
